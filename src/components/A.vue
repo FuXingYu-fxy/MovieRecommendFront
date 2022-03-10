@@ -2,7 +2,7 @@
 
 </script>
 <template>
-  <h1>page A</h1>
+  <h1 style="margin: 0;">page A</h1>
   <div v-for="item of 40" :key="item">
     {{ item }}
   </div>

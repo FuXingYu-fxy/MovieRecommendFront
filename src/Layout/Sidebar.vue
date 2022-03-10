@@ -1,35 +1,20 @@
 <script lang="ts" setup>
-import { NMenu, MenuOption } from "naive-ui";
-import {ref, h, onMounted} from "vue";
-import {routes} from "@/router/index";
-import { RouteRecordRaw, RouterLink } from "vue-router";
-// 
+import { routes } from "@/router/index";
+import { NMenu } from "naive-ui";
+import {ref} from "vue";
+import {useNaiveUiMenuOptions} from "@/hooks/index"
+const collapsed = ref(false)
 const activeMenu = ref("Dashbord");
-const traverse = (routes: RouteRecordRaw) => {
-  const menu: MenuOption = {
-    label: () => h(
-      RouterLink,
-      {
-        to: {
-          name: routes.name || "no name"
-        }
-      },
-      { default: () => routes.name || "没有配置"}
-    ),
-    key: routes.name as string
-  }
-  if (routes.children && routes.children.length) {
-    menu.children = routes.children.map(traverse)
-  }
-  return menu;
-}
-const menuOptions = routes[0].children && routes[0].children.map(traverse)
-onMounted(() => {
-  console.log(routes)
-})
+const menuOptions = useNaiveUiMenuOptions(routes);
+
 </script>
 <template>
-<n-menu mode="vertical" v-model:value="activeMenu" :options="menuOptions" />
+<n-menu 
+  mode="vertical" 
+  v-model:value="activeMenu" 
+  :options="menuOptions" 
+  :collapsed="collapsed"
+/>
 </template>
 
 <style lang="scss">

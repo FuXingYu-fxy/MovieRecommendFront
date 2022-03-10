@@ -1,33 +1,44 @@
 <script lang="ts" setup>
-import { NLayout, NLayoutContent, NLayoutHeader, NLayoutSider, NSwitch } from "naive-ui";
-import Header from "@/Layout/Header.vue";
+import {
+  NLayout,
+  NLayoutContent,
+  NLayoutHeader,
+  NLayoutSider,
+} from "naive-ui";
 import Sidebar from "@/Layout/Sidebar.vue";
 import AppMain from "@/Layout/AppMain.vue";
+import Header from "./Header.vue";
 import { ref } from "vue";
+
 const collapsed = ref(false);
+
 </script>
 <template>
-  <n-layout class="app-wrapper">
-    <n-layout-header class="app-header" bordered>
-      <n-switch v-model:value="collapsed">fa</n-switch>
+  <!-- 利用了 absolute + (top/right/bottom/left)=0 铺满全屏 -->
+  <n-layout class="app-wrapper" position="absolute">
+    <!-- header 48px -->
+    <n-layout-header class="app-header">
+      <Header v-model:collapsed="collapsed"/>
     </n-layout-header>
-    <n-layout has-sider>
+    <!-- top 48px -->
+    <n-layout has-sider class="app-content" position="absolute">
       <n-layout-sider
-        bordered
+        :bordered="!collapsed"
         collapse-mode="transform"
         :collapsed="collapsed"
-        :collapsed-width="48"
+        :collapsed-width="15"
+        :native-scrollbar="false"
         :width="140"
-        content-style="padding: 10px 0"
         @collapse="collapsed = true"
         @expand="collapsed = false"
         show-trigger="arrow-circle"
-        class="app-sider"
+      >
+        <Sidebar :collapsed="collapsed" />
+      </n-layout-sider>
+      <n-layout-content
+        content-style="padding: 24px;"
         :native-scrollbar="false"
       >
-        <Sidebar />
-      </n-layout-sider>
-      <n-layout-content class="app-content" content-style="padding: 24px;" :native-scrollbar="false">
         <AppMain />
       </n-layout-content>
     </n-layout>
@@ -36,15 +47,12 @@ const collapsed = ref(false);
 
 <style lang="scss">
 $header-height: 48px;
-.app-header {
+.n-layout-header.app-header {
   height: $header-height;
+  background: rgb(0,0,0);
 }
 
-.app-content {
-  height: calc(100vh - $header-height);
-  border: 1px solid red;
-}
-.app-sider {
-  height: calc(100vh - $header-height);
+.n-layout.app-content {
+  top: $header-height;
 }
 </style>
