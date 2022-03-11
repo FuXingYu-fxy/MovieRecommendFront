@@ -9,9 +9,7 @@ import Sidebar from "@/Layout/Sidebar.vue";
 import AppMain from "@/Layout/AppMain.vue";
 import Header from "./Header.vue";
 import { ref } from "vue";
-
 const collapsed = ref(false);
-
 </script>
 <template>
   <!-- 利用了 absolute + (top/right/bottom/left)=0 铺满全屏 -->
@@ -23,14 +21,14 @@ const collapsed = ref(false);
     <!-- top 48px -->
     <n-layout has-sider class="app-content" position="absolute">
       <n-layout-sider
+        @expand="collapsed = false"
+        @collapse="collapsed = true"
         :bordered="!collapsed"
-        collapse-mode="transform"
         :collapsed="collapsed"
         :collapsed-width="15"
         :native-scrollbar="false"
-        :width="140"
-        @collapse="collapsed = true"
-        @expand="collapsed = false"
+        :class="collapsed && 'app-sider-collapsed'"
+        collapse-mode="transform"
         show-trigger="arrow-circle"
       >
         <Sidebar :collapsed="collapsed" />
@@ -55,4 +53,9 @@ $header-height: 48px;
 .n-layout.app-content {
   top: $header-height;
 }
+
+.n-layout-sider.app-sider-collapsed {
+  background: rgb(16,16,16);
+}
+
 </style>
