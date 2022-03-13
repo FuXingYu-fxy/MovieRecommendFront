@@ -5,4 +5,4 @@ import { NGradientText } from "naive-ui";
   <n-gradient-text> 基于项目的协同过滤推荐算法 </n-gradient-text>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

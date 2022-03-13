@@ -11,14 +11,19 @@ const modulesRoute = Object.keys(modules).map(path => {
 export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/introduction",
     name: 'Home',
     component: Layout,
     children: [
       {
+        path: "",
+        name: "Fxy",
+        hidden: true,
+        component: () => import("@/view/index.vue")
+      },
+      {
         path: "introduction",
         name: "Introduction",
-        component: () => import("@/view/index.vue")
+        component: () => import("@/view/introduction.vue")
       }
     ]
   },

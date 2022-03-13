@@ -22,3 +22,6 @@ const handleClick = () => {
     <n-button @click="handleClick">save</n-button>
   </div>
 </template>
+
+<style lang="scss" scoped>
+</style>

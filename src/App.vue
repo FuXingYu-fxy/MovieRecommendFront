@@ -8,4 +8,4 @@ import { darkTheme, NConfigProvider } from "naive-ui";
   </n-config-provider>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 // import { useRailStyle } from "@/hooks/index";
-import { NSwitch, NInput, NIcon, NSpace } from "naive-ui";
+import { NSwitch, NInput, NIcon, NSpace, NButton } from "naive-ui";
 import {
   MdSearch,
   LogoGithub,
@@ -39,15 +39,28 @@ const expand = computed<boolean>({
         </template>
       </n-input>
     </n-space>
-    <n-space justify="space-around" style="min-width: 250px;">
-      <n-icon :component="LogoGithub" :size="iconSize" />
-      <n-icon :component="IosConstruct" :size="iconSize" />
-      <n-icon :component="IosContact" :size="iconSize" />
-    </n-space>
+    <!-- <n-space justify="space-around" style="min-width: 250px"> -->
+    <n-button quaternary circle>
+      <template #icon>
+        <n-icon :component="LogoGithub" :size="iconSize" />
+      </template>
+    </n-button>
+
+    <n-button>
+      <template #icon>
+        <n-icon :component="IosConstruct" :size="iconSize" />
+      </template>
+    </n-button>
+    <n-button>
+      <template #icon>
+        <n-icon :component="IosContact" :size="iconSize" />
+      </template>
+    </n-button>
+    <!-- </n-space> -->
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header {
   height: 100%;
   display: flex;

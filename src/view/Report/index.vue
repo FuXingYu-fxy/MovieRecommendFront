@@ -48,4 +48,4 @@ const handleEdit = (row: { name: string; hacker: string }, i: number) => {
   </ul>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>
