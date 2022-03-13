@@ -9,6 +9,7 @@ const menuOptions = useNaiveUiMenuOptions(routes);
 
 </script>
 <template>
+<h1>假装是头像</h1>
 <n-menu 
   mode="vertical" 
   v-model:value="activeMenu" 

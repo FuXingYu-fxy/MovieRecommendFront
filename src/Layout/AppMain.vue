@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { RouterView } from "vue-router";
-import { Transition } from "vue";
 </script>
 <template>
   <router-view v-slot="{Component, route}">
@@ -21,6 +20,6 @@ import { Transition } from "vue";
 }
 .route-enter-active,
 .route-leave-active {
-  transition: 0.5s linear;
+  transition: 0.4s;
 }
 </style>
