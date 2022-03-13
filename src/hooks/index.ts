@@ -59,7 +59,7 @@ function traverseRoute(route: RouteRecordRaw) {
     }
     // 如果二级菜单只有一个路由, 默认只显示这个子路由
     // 在路由配置里 awalysShow: true, 覆盖此行为
-    if (route.children!.length === 1 && !route.alwaysShow) {
+    if (menu.children!.length === 1 && !route.alwaysShow) {
       return menu.children[0]
     }
   }
