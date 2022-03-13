@@ -7,9 +7,9 @@ const route: RouteRecordRaw = {
   component: Layout,
   children: [
     {
-      path: "recommend",
+      path: "hottestRecommend",
       name: "HottestRecommend",
-      component: () => import("@/components/Hottest/index.vue"),
+      component: () => import("@/view/Hottest/index.vue"),
     }
   ]
 }

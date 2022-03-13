@@ -1,5 +1,5 @@
 import { h, CSSProperties } from "vue";
-import { RouteRecordName, RouterLink } from "vue-router";
+import { RouterLink } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import type { MenuOption } from "naive-ui";
 import {routeNameMap} from "@/dicts/index"
@@ -30,24 +30,27 @@ export function useRailStyle(checkedColor = "#d03050", uncheckedColor = "#2080f0
   };
 }
 
-function traverseRoute(routes: RouteRecordRaw) {
+function traverseRoute(route: RouteRecordRaw) {
+  const hasChildren = route.children && route.children.length;
+  // 如果
+  const renderNode = hasChildren ? "span" : RouterLink;
   const menu: MenuOption = {
     label: () =>
       h(
-        RouterLink,
+        renderNode as any,
         {
           to: {
-            name: routes.name || "no name"
+            name: route.name || "no name"
           },
         },
-        { default: () => routes.name ? routeNameMap[routes.name as keyof (typeof routeNameMap)] || "no name" : "no name"  }
+        { default: () => route.name ? routeNameMap[route.name as keyof (typeof routeNameMap)] || "no specific name" : "no specific name"  }
       ),
-    key: routes.path,
+    key: route.path,
   };
-  if (routes.children && routes.children.length) {
+  if (hasChildren) {
     menu.children = [];
-    for (let i = 0; i < routes.children.length; i++) {
-      const item = routes.children[i]
+    for (let i = 0; i < route.children!.length; i++) {
+      const item = route.children![i]
       if (item.hidden) {
         // 侧边栏里不显示带有 hidden 的属性
         continue;
@@ -56,7 +59,7 @@ function traverseRoute(routes: RouteRecordRaw) {
     }
     // 如果二级菜单只有一个路由, 默认只显示这个子路由
     // 在路由配置里 awalysShow: true, 覆盖此行为
-    if (routes.children.length === 1 && !routes.alwaysShow) {
+    if (route.children!.length === 1 && !route.alwaysShow) {
       return menu.children[0]
     }
   }
