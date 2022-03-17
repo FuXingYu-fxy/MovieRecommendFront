@@ -45,7 +45,7 @@ function traverseRoute(route: RouteRecordRaw) {
         },
         { default: () => route.name ? routeNameMap[route.name as keyof (typeof routeNameMap)] || "no specific name" : "no specific name"  }
       ),
-    key: route.path,
+    key: route.name as string || "no speific name",
   };
   if (hasChildren) {
     menu.children = [];
