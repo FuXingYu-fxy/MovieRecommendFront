@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 import { routes } from "@/router/index";
 import { NMenu, NGradientText } from "naive-ui";
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { useNaiveUiMenuOptions } from "@/hooks/index";
-const menuOptions = useNaiveUiMenuOptions(routes);
+// routes 现在是一个响应式对象, 所以在改变时computed 会重新触发
+const menuOptions = computed(() => useNaiveUiMenuOptions(routes))
 const props = defineProps<{
   collapsed: boolean;
 }>();
+
 const emit = defineEmits(["update:collapsed"]);
 const collapsed = computed({
   get: () => props.collapsed,

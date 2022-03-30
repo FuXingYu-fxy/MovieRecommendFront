@@ -9,7 +9,7 @@ import { RouterView } from "vue-router";
   </router-view>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .route-enter-from {
   transform: translateX(-15px);
   opacity: 0;

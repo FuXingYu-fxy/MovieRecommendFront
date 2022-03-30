@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { NGradientText, NInput, NButton } from "naive-ui";
-import { ref } from "vue";
+import { NGradientText, NInput, NButton, NDivider, NCard, NGrid, NGi, NSpace, NImage} from "naive-ui";
+import { ref, reactive } from "vue";
 import { recommendByUserId } from "@/api/recommend";
 const loading = ref(false);
-const result = ref([]);
+const movieId = ref([]);
 const userId = ref("");
 const handleClick = async () => {
   if (!userId.value) {
@@ -15,7 +15,7 @@ const handleClick = async () => {
       userId: userId.value,
       N: 20
     });
-    result.value = data;
+    movieId.value = data.data
   } finally {
     loading.value = false;
   }
@@ -32,10 +32,32 @@ const handleClick = async () => {
     ></n-input>
 
     <n-button @click="handleClick" :loading="loading">请求</n-button>
-    <div v-for="(item, index) of result" :key="item">
-      {{ item }}----{{ index }}
-    </div>
+    <n-divider />
+    <n-card title="还没想好名字">
+      <n-space justify="center">
+        <n-image
+          v-for="item of movieId"
+          :src="`http://localhost:5500/cover/${~~item}_cover.jpg`"
+          :key="item"
+        />
+      </n-space>
+    </n-card>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.first {
+  background-color: red;
+
+}
+.second {
+  background-color: green;
+}
+.third {
+  background-color: blue;
+}
+
+.fourth {
+  background-color: yellow;
+}
+</style>

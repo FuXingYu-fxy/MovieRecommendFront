@@ -1,47 +1,61 @@
+import { shallowReactive } from "vue";
 import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
-import store from "@/store/index"
 import Layout from "@/Layout/index.vue";
 
 // 自动导入 modules/ 下的文件
 const modules = import.meta.globEager("./modules/*.ts");
-const modulesRoute = Object.keys(modules).map(path => {
-  return modules[path].default as RouteRecordRaw
-})
+const modulesRoute = Object.keys(modules).map((path) => {
+  return modules[path].default as RouteRecordRaw;
+});
 
-export const routes: Array<RouteRecordRaw> = [
+export const routes: Array<RouteRecordRaw> = shallowReactive([
   {
     path: "/",
-    name: 'Home',
+    name: "Home",
     component: Layout,
     children: [
       {
         path: "",
         name: "Fxy",
         hidden: true,
-        component: () => import("@/view/index.vue")
+        component: () => import("@/view/index.vue"),
       },
       {
         path: "introduction",
         name: "Introduction",
-        component: () => import("@/view/introduction.vue")
-      }
-    ]
+        component: () => import("@/view/introduction.vue"),
+      },
+      {
+        path: "login",
+        name: "Login",
+        component: () => import("@/view/Login/index.vue"),
+      },
+    ],
   },
-  ...modulesRoute
+  ...modulesRoute,
+]);
+
+export const asyncRoutes: Array<RouteRecordRaw> = [
+  {
+    path: "/admin",
+    name: "Admin",
+    meta: {
+      roles: ["admin"],
+    },
+    component: Layout,
+    children: [
+      {
+        path: "",
+        name: "AdminConfig",
+        component: () => import("@/view/Admin/index.vue"),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
   routes,
   history: createWebHashHistory(),
 });
-
-router.beforeEach((to, from, next) => {
-  // 记录下来源 url 
-  store.commit({
-    type: "UPDATE_ORIGINAL_PATH",
-    path: to.path
-  })
-  next();
-})
 
 export default router;

@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import {
-  NLayout,
-  NLayoutContent,
-  NLayoutHeader,
-  NLayoutSider,
-} from "naive-ui";
+import { NLayout, NLayoutContent, NLayoutHeader, NLayoutSider } from "naive-ui";
 import Sidebar from "@/Layout/Sidebar.vue";
 import AppMain from "@/Layout/AppMain.vue";
+import useStore from "@/hooks/store";
 import Header from "./Header.vue";
-import { ref } from "vue";
-const collapsed = ref(false);
+import { computed } from "vue";
+const store = useStore();
+const collapsed = computed<boolean>({
+  get() {
+    return store.getters.collapsed;
+  },
+  set(val) {
+    store.commit("TOGGLE_COLLAPSED", val);
+  },
+});
 
 </script>
 <template>
@@ -17,7 +21,7 @@ const collapsed = ref(false);
   <n-layout class="app-wrapper" position="absolute">
     <!-- header 48px -->
     <n-layout-header class="app-header">
-      <Header v-model:collapsed="collapsed"/>
+      <Header v-model:collapsed="collapsed" />
     </n-layout-header>
     <!-- top 48px -->
     <n-layout has-sider class="app-content" position="absolute">
@@ -48,7 +52,7 @@ const collapsed = ref(false);
 $header-height: 48px;
 .n-layout-header.app-header {
   height: $header-height;
-  background: rgb(0,0,0);
+  background: rgb(0, 0, 0);
 }
 
 .n-layout.app-content {
@@ -56,7 +60,6 @@ $header-height: 48px;
 }
 
 .n-layout-sider.app-sider-collapsed {
-  background: rgb(16,16,16);
+  background: rgb(16, 16, 16);
 }
-
 </style>

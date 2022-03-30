@@ -6,7 +6,8 @@ export const routeNameMap = {
   Recommend: "推荐",
   RecommendByUser: "基于用户的推荐",
   RecommendByItem: "基于项目的推荐",
-  Report: "提报",
-  ReportTable: "报表",
-  ReportEdit: "编辑"
+  Favorite: "收藏",
+  FavoriteMovie: "收藏的电影",
+  Login: "登录",
+  AdminConfig: "管理员配置"
 }
