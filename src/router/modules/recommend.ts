@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 import Layout from "@/Layout/index.vue";
-const routes: RouteRecordRaw = {
+const route: RouteRecordRaw = {
   path: "/recommend",
   name: "Recommend",
   component: Layout,
@@ -18,4 +18,4 @@ const routes: RouteRecordRaw = {
   ],
 };
 
-export default routes;
+export default route;
