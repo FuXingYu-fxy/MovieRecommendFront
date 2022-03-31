@@ -21,12 +21,14 @@ import {
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
 import {renderIcon} from "@/tools/index"
+import {useRouter} from "vue-router";
 
 
 interface Props {
   collapsed: boolean;
 }
 
+const router = useRouter()
 const message = useMessage();
 const props = defineProps<Props>();
 const emit = defineEmits(["update:collapsed"]);
@@ -67,6 +69,10 @@ const gotoGithub = () => {
   location.href = "https://github.com/FuXingYu-fxy/MovieRecommendFront";
 };
 
+const gotoSetting = () => {
+  router.push({name: 'SystemSetting'})
+}
+
 // const railStyle = useRailStyle("rgb(158,158,158)", "rgb(58,58,58)");
 </script>
 <template>
@@ -89,7 +95,7 @@ const gotoGithub = () => {
         </template>
       </n-button>
 
-      <n-button text>
+      <n-button text @click="gotoSetting">
         <template #icon>
           <n-icon :component="IosConstruct" :size="iconSize" />
         </template>
