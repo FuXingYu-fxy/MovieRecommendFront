@@ -34,7 +34,7 @@ const handleClick = async () => {
     <n-button @click="handleClick" :loading="loading">请求</n-button>
     <n-divider />
     <n-card title="还没想好名字">
-      <n-space justify="center">
+      <n-space justify="space-around">
         <n-image
           v-for="item of movieId"
           :src="`http://localhost:5500/cover/${~~item}_cover.jpg`"
