@@ -2,17 +2,19 @@ import { h, CSSProperties } from "vue";
 import { RouterLink } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import type { MenuOption } from "naive-ui";
-import {routeNameMap} from "@/dicts/index"
-
+import { routeNameMap } from "@/dicts/index";
 
 export function useNaiveUiMenuOptions(routes: RouteRecordRaw[]) {
   if (routes && routes.length) {
-    return routes.map(traverseRoute)
+    return routes.filter(item => !item.hidden).map(traverseRoute);
   }
   return [];
 }
 
-export function useRailStyle(checkedColor = "#d03050", uncheckedColor = "#2080f0") {
+export function useRailStyle(
+  checkedColor = "#d03050",
+  uncheckedColor = "#2080f0"
+) {
   return ({ focused, checked }: { focused: boolean; checked: boolean }) => {
     const style: CSSProperties = {};
     if (checked) {
@@ -30,7 +32,7 @@ export function useRailStyle(checkedColor = "#d03050", uncheckedColor = "#2080f0
   };
 }
 
-function traverseRoute(route: RouteRecordRaw) {
+function traverseRoute(route: RouteRecordRaw): MenuOption {
   const hasChildren = route.children && route.children.length;
   // 如果
   const renderNode = hasChildren ? "span" : RouterLink;
@@ -40,27 +42,25 @@ function traverseRoute(route: RouteRecordRaw) {
         renderNode as any,
         {
           to: {
-            name: route.name || "no name"
+            name: route.name || "no name",
           },
         },
-        { default: () => route.name ? routeNameMap[route.name as keyof (typeof routeNameMap)] || "no specific name" : "no specific name"  }
+        {
+          default: () =>
+            route.name
+              ? routeNameMap[route.name as keyof typeof routeNameMap] ||
+                "no specific name"
+              : "no specific name",
+        }
       ),
-    key: route.name as string || "no speific name",
+    key: (route.name as string) || "no speific name",
   };
   if (hasChildren) {
-    menu.children = [];
-    for (let i = 0; i < route.children!.length; i++) {
-      const item = route.children![i]
-      if (item.hidden) {
-        // 侧边栏里不显示带有 hidden 的属性
-        continue;
-      }
-      menu.children.push(traverseRoute(item))
-    }
+    menu.children = route.children!.filter(item => !item.hidden).map(traverseRoute)
     // 如果二级菜单只有一个路由, 默认只显示这个子路由
     // 在路由配置里 awalysShow: true, 覆盖此行为
     if (menu.children!.length === 1 && !route.alwaysShow) {
-      return menu.children[0]
+      return menu.children[0];
     }
   }
   return menu;

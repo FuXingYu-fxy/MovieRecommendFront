@@ -9,5 +9,7 @@ export const routeNameMap = {
   Favorite: "收藏",
   FavoriteMovie: "收藏的电影",
   Login: "登录",
-  AdminConfig: "管理员配置"
+  AdminConfig: "管理员配置",
+  Setting: "设置",
+  SystemSetting: "系统设置"
 }
