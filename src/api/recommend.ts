@@ -6,3 +6,10 @@ export function recommendByUserId(params: {userId: string, N?: number}) {
     params
   })
 }
+
+export function getMovieInfo(params: {movieId: string}) {
+  return request({
+    url: "/getMovieInfo",
+    params
+  })
+}
