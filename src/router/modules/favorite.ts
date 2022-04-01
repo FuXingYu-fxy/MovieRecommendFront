@@ -9,7 +9,7 @@ const route: RouteRecordRaw = {
     {
       path: "favorite-movie",
       name: "FavoriteMovie",
-      component: () => import("@/view/Favorite/index.vue")
+      component: () => import("@/view/favorite/index.vue")
     },
   ]
 }

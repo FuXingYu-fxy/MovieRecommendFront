@@ -10,7 +10,7 @@ const route: RouteRecordRaw = {
     {
       path: "system-setting",
       name: "SystemSetting",
-      component: () => import("@/view/Setting/index.vue"),
+      component: () => import("@/view/setting/index.vue"),
     },
   ],
 };

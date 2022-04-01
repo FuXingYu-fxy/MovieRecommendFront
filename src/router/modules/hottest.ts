@@ -9,7 +9,7 @@ const route: RouteRecordRaw = {
     {
       path: "hottestRecommend",
       name: "HottestRecommend",
-      component: () => import("@/view/Hottest/index.vue"),
+      component: () => import("@/view/hottest/index.vue"),
     }
   ]
 }

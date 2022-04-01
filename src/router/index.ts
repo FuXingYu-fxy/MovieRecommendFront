@@ -28,7 +28,7 @@ export const routes: Array<RouteRecordRaw> = shallowReactive([
       {
         path: "login",
         name: "Login",
-        component: () => import("@/view/Login/index.vue"),
+        component: () => import("@/view/login/index.vue"),
       },
     ],
   },
@@ -47,7 +47,7 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
       {
         path: "",
         name: "AdminConfig",
-        component: () => import("@/view/Admin/index.vue"),
+        component: () => import("@/view/admin/index.vue"),
       },
     ],
   },

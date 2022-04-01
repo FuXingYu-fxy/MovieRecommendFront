@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 import Layout from "@/Layout/index.vue";
+
 const route: RouteRecordRaw = {
   path: "/recommend",
   name: "Recommend",
@@ -8,13 +9,20 @@ const route: RouteRecordRaw = {
     {
       path: "recommendByUser",
       name: "RecommendByUser",
-      component: () => import("@/view/Recommend/RecommendByUser.vue"),
+      component: () => import("@/view/recommend/RecommendByUser.vue"),
     },
     {
       path: "recommendByItem",
       name: "RecommendByItem",
-      component: () => import("@/view/Recommend/RecommendByItem.vue"),
+      component: () => import("@/view/recommend/RecommendByItem.vue"),
     },
+    {
+      path: "movie-details",
+      name: "MovieDetails",
+      hidden: true,
+      props: true,
+      component: () => import("@/view/recommend/MovieDetails.vue")
+    }
   ],
 };
 
