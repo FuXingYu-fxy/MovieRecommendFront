@@ -61,6 +61,7 @@ $transition-duraiton: 0.3s;
   background: rgba(0, 0, 0, 0.604);
   overflow: hidden;
   user-select: none;
+  text-align: justify;
 }
 
 img {
