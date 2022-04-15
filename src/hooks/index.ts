@@ -3,6 +3,8 @@ import { RouterLink } from "vue-router";
 import type { RouteRecordRaw } from "vue-router";
 import type { MenuOption } from "naive-ui";
 import { routeNameMap } from "@/dicts/index";
+import { renderIcon } from "@/tools";
+import {HomeOutline} from '@vicons/ionicons5'
 
 export function useNaiveUiMenuOptions(routes: RouteRecordRaw[]) {
   if (routes && routes.length) {
@@ -54,6 +56,7 @@ function traverseRoute(route: RouteRecordRaw): MenuOption {
         }
       ),
     key: (route.name as string) || "no speific name",
+    icon: renderIcon(HomeOutline)
   };
   if (hasChildren) {
     menu.children = route.children!.filter(item => !item.hidden).map(traverseRoute)

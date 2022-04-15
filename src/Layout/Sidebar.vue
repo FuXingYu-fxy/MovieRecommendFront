@@ -4,17 +4,11 @@ import { NMenu, NGradientText } from "naive-ui";
 import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { useNaiveUiMenuOptions } from "@/hooks/index";
+import useStore from '@/hooks/store'
 // routes 现在是一个响应式对象, 所以在改变时computed 会重新触发
 const menuOptions = computed(() => useNaiveUiMenuOptions(routes))
-const props = defineProps<{
-  collapsed: boolean;
-}>();
 
-const emit = defineEmits(["update:collapsed"]);
-const collapsed = computed({
-  get: () => props.collapsed,
-  set: (val) => emit("update:collapsed", val),
-});
+const store = useStore();
 const route = useRoute();
 const activeMenu = computed(() => (route.name as string))
 
@@ -27,7 +21,7 @@ const activeMenu = computed(() => (route.name as string))
     mode="vertical"
     :value="activeMenu"
     :options="menuOptions"
-    :collapsed="collapsed"
+    :collapsed="store.state.collapsed"
   />
 </template>
 

@@ -30,13 +30,13 @@ const collapsed = computed<boolean>({
         @collapse="collapsed = true"
         :bordered="!collapsed"
         :collapsed="collapsed"
-        :collapsed-width="15"
+        :collapsed-width="48"
         :native-scrollbar="false"
         :class="collapsed && 'app-sider-collapsed'"
-        collapse-mode="transform"
+        collapse-mode="width"
         show-trigger="arrow-circle"
       >
-        <Sidebar v-model:collapsed="collapsed" />
+        <Sidebar />
       </n-layout-sider>
       <n-layout-content
         content-style="padding: 24px;"
@@ -60,6 +60,6 @@ $header-height: 48px;
 }
 
 .n-layout-sider.app-sider-collapsed {
-  background: rgb(16, 16, 16);
+  background: #101014;
 }
 </style>

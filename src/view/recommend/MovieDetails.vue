@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { NCard, NText, NRate } from "naive-ui";
 import { ref } from "vue";
-import cover from "../../../public/halo_cover.jpg";
-import poster from "../../../public/halo_poster.jpg"
+import cover from "/halo_cover.jpg";
+import poster from "/halo_poster.jpg"
 
 interface Props {
   id: string;

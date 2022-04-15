@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { NSpace, NCard, useMessage } from "naive-ui";
-import picture from "../../../public/1.jpg";
+import picture from "/1.jpg";
 import Empty from "@/components/Empty.vue";
 import ImageContainer from "@/components/ImageContainer.vue";
 // import {getMovieInfo} from "@/api/recommend";
