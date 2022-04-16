@@ -1,18 +1,17 @@
 import request from "@/app/request";
 import type {AxiosResponse} from "axios"
-interface Response {
-  data: {
-    roles: string[];
-  }
+interface UserInfo {
+  roles: string[];
+  token: string;
+  userId: string;
 }
-
 export function getUserInfo(requestBody: { token: string }) {
   // return request({
   //   url: '/getUserInfo',
   //   data: requestBody
   // })
 
-  return new Promise<Response>((resolve) => {
+  return new Promise<AxiosResponse<UserInfo>>((resolve) => {
     setTimeout(() => {
       const response = {
         data: {

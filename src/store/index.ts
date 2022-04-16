@@ -18,7 +18,6 @@ const store = createStore<RootStateTypes>({
   mutations: {
     TOGGLE_COLLAPSED(state, collapsed: boolean) {
       state.collapsed = collapsed
-      console.log(state.collapsed)
     }
   },
   getters: {

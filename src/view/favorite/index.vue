@@ -1,17 +1,11 @@
 <script lang="ts" setup>
-import { NSpace, NCard, useMessage } from "naive-ui";
+import { NSpace, NCard} from "naive-ui";
 import picture from "/1.jpg";
 import Empty from "@/components/Empty.vue";
 import ImageContainer from "@/components/ImageContainer.vue";
 // import {getMovieInfo} from "@/api/recommend";
-import { useRouter } from "vue-router";
 
-const message = useMessage();
-const router = useRouter();
-const handleClick = (id: string) => {
-  message.success("跳转到电影详情页面!!!");
-  router.push({name: 'MovieDetails', params: {id}})
-};
+
 </script>
 
 <template>
@@ -19,7 +13,6 @@ const handleClick = (id: string) => {
     <!-- <Empty v-if="data.length === 0"></Empty> -->
     <n-space justify="space-around">
       <image-container
-        @click="handleClick(String(item))"
         v-for="item of 50"
         :key="item"
         :src="picture"

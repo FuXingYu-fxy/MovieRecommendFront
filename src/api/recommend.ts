@@ -1,15 +1,17 @@
 import request from "@/app/request"
-
-export function recommendByUserId(params: {userId: string, N?: number}) {
-  return request({
-    url: "/recommend",
-    params
-  })
+export interface MovieInfo {
+  id: number;
+  poster: string;
+  cover: string;
+  title_zh: string;
+  title_cn: string;
+  description: string;
 }
+type RecommendType =  'Item' | 'User'
 
-export function getMovieInfo(params: {movieId: string}) {
-  return request({
-    url: "/getMovieInfo",
+export function recommend<T = MovieInfo[]>(params: {userId: string, N?: number}, type: RecommendType){
+  return request<T>({
+    url: `/recommendBy${type}`,
     params
-  })
+  });
 }

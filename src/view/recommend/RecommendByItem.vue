@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { NGradientText } from "naive-ui";
+import Recommend from "./Recommend.vue";
 </script>
 <template>
-  <n-gradient-text> 基于项目的协同过滤推荐算法 </n-gradient-text>
+  <Recommend type="Item" />
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>

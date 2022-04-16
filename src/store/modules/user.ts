@@ -8,6 +8,7 @@ import { RouteRecordRaw } from "vue-router";
 export interface User {
   roles: string[];
   token: string | undefined;
+  userId: string;
 }
 
 export function hasPermission(route: RouteRecordRaw, roles: string[]): boolean {
@@ -21,10 +22,12 @@ const user: Module<User, RootStateTypes> = {
   namespaced: true,
   state: {
     roles: ['editor'],
-    token: getToken()
+    token: getToken(),
+    userId: '134',
   },
   getters: {
     roles: state => state.roles,
+    userId: state => state.userId,
   },
   mutations: {
     SET_ROLE(state, roles) {
@@ -32,6 +35,9 @@ const user: Module<User, RootStateTypes> = {
     },
     SET_TOKEN(state, token) {
       state.token = token
+    },
+    SET_USER_ID(state, userId) {
+      state.userId = userId;
     }
   },
   actions: {
@@ -41,8 +47,8 @@ const user: Module<User, RootStateTypes> = {
       }
       try {
         const { data } = await getUserInfo({token: state.token})
-        console.log(data)
         commit("SET_ROLE", data.roles);
+        commit("SET_USER_ID", data.userId);
         return data.roles;
       } catch (err: any) {
         throw Error(err.message || '未知的请求错误!!!')

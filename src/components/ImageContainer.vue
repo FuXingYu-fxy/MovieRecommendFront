@@ -1,34 +1,56 @@
-<script lang="ts" setup>
-import fallbackImg from "../../public/fallback.jpg";
-import { withDefaults, computed } from "vue";
-interface Props {
-  width?: number;
-  src: string;
-  title: string;
-  description: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  src: fallbackImg,
-  title: "",
-  description: "暂无描述",
-});
-
-const dynamicHeight = computed(() => {
-  const { width } = props;
-  return {
-    height: (width ? 1.4 * width : 200) + "px",
-  };
+<script lang="ts">
+import fallbackImg from "/fallback.jpg";
+import { defineComponent } from "vue";
+export default defineComponent({
+  props: {
+    cover: {
+      type: String,
+      default: fallbackImg,
+    },
+    title: {
+      type: String,
+      default: "",
+    },
+    description: {
+      type: String,
+      default: "",
+    },
+    width: {
+      type: Number,
+      default: 200,
+    },
+    id: {
+      type: Number,
+    },
+    poster: {
+      type: String,
+    }
+  },
+  methods: {
+    jumpToMovieDetails() {
+      this.$router.push({
+        name: "MovieDetails",
+        params: {
+          id: this.id,
+          poster: this.poster,
+          cover: this.cover,
+          title: this.title,
+          description :this.description,
+        },
+      });
+    },
+  },
 });
 </script>
 
 <template>
-  <div class="img-wrapper" :style="`width: ${width ? width + 'px' : ''}`">
-    <img :src="src" />
+  <div
+    @click="jumpToMovieDetails"
+    class="img-wrapper"
+    :style="`width: ${width ? width + 'px' : ''}`"
+  >
+    <img :src="cover" />
     <span class="title">{{ title }}</span>
-    <div class="tips" :style="dynamicHeight">
-      {{ description }}
-    </div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -37,7 +59,6 @@ $transition-duraiton: 0.3s;
 .img-wrapper {
   width: 150px;
   position: relative;
-  // overflow: auto;
   cursor: pointer;
   text-align: center;
   &:hover {
@@ -48,20 +69,7 @@ $transition-duraiton: 0.3s;
     .title {
       color: cyan;
     }
-    .tips {
-      opacity: 1;
-      transition: 0.3s $transition-duraiton ease-in;
-    }
   }
-}
-.tips {
-  position: absolute;
-  top: $offset;
-  opacity: 0;
-  background: rgba(0, 0, 0, 0.604);
-  overflow: hidden;
-  user-select: none;
-  text-align: justify;
 }
 
 img {

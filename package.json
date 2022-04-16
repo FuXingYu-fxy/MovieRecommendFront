@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.26.1",
     "js-cookie": "^3.0.1",
+    "quick-lru": "^6.1.1",
     "vue": "^3.2.25",
     "vue-router": "^4.0.13",
     "vuex": "^4.0.2"
