@@ -23,14 +23,13 @@ export default defineComponent({
     };
   },
   async created() {
-    const {data} = await recommend(
+    const data = await recommend(
       {
         userId: this.userId,
         N: 30,
       },
       this.type
     );
-    console.log(data)
     if (data.length) {
       this.movieData = data.map(item => {
         const root = import.meta.env.VITE_BASE_URL
@@ -40,7 +39,6 @@ export default defineComponent({
           poster: `${root}/poster/${item.poster}`,
         }
       });
-      console.log(this.movieData)
     }
   },
   computed: {

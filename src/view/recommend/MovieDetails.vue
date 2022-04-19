@@ -1,38 +1,57 @@
 <script lang="ts" setup>
 import { NCard, NText, NRate } from "naive-ui";
+import { queryRating, updateRating } from "@/api/movie";
+import useStore from "@/hooks/store";
 import { ref } from "vue";
-// import cover from "/halo_cover.jpg";
-// import poster from "/halo_poster.jpg"
-defineProps<{
-  id: number,
+const store = useStore();
+const props = defineProps<{
+  id: string;
   poster: string;
   cover: string;
   title: string;
   description: string;
-}>()
+}>();
 const rate = ref(0);
+const readonly = ref(false);
 const handleChangeRate = (val: number) => {
-  rate.value = val
-}
+  updateRating({
+    userId: store.getters["user/userId"],
+    movieId: Number(props.id),
+    rating: val
+  }).then(res => {
+    console.log(res)
+  })
+  rate.value = val;
+};
+queryRating({
+  userId: store.getters["user/userId"],
+  movieId: Number(props.id),
+}).then(({rating}) => {
+  rate.value = rating;
+  readonly.value = Boolean(rating)
+});
 </script>
 <template>
   <n-card>
     <div class="container">
-      <div class="poster" :style="`background-image: url(${poster})`">
-      </div>
+      <div class="poster" :style="`background-image: url(${poster})`"></div>
       <div class="movie-info-container">
-        <img class="cover" :src="cover"/>
+        <img class="cover" :src="cover" />
         <div class="text-container">
-          <span>{{title}}</span>
+          <span>{{ title }}</span>
           <span>动作冒险</span>
           <p>剧情简介</p>
-          <p>{{description}}</p>
+          <p>{{ description }}</p>
           <p>看过这部电影？ 给个<n-text type="success">评分吧</n-text></p>
-          <n-rate allow-half :value="rate" :on-update:value="handleChangeRate"/>
+          <n-rate
+            :readonly="readonly"
+            allow-half
+            :value="rate"
+            :on-update:value="handleChangeRate"
+          />
         </div>
       </div>
     </div>
-    
   </n-card>
 </template>
 
@@ -51,7 +70,8 @@ const handleChangeRate = (val: number) => {
 .movie-info-container {
   display: flex;
   padding: 0 80px;
-  justify-content: center;
+  // 文字不全时, center 会导致cover移动到中间
+  // justify-content: center;
   // align-items: center;
   position: relative;
   width: 100%;
@@ -59,10 +79,10 @@ const handleChangeRate = (val: number) => {
   box-sizing: border-box;
   .cover {
     display: block;
-    transform: scale(.8);
+    transform: scale(0.8);
     border-radius: 15px;
     cursor: pointer;
-    transition: .5s;
+    transition: 0.5s;
     height: 100%;
     &:hover {
       cursor: wait;
@@ -71,11 +91,12 @@ const handleChangeRate = (val: number) => {
   .text-container {
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
+    justify-content: space-around;
     padding: 50px 0;
     height: 100%;
     box-sizing: border-box;
     overflow: hidden;
+    user-select: none;
   }
 }
 </style>
