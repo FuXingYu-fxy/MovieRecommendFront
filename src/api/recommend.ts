@@ -15,3 +15,9 @@ export function recommend<T = MovieInfo[]>(params: {userId: string, N?: number},
     params
   });
 }
+
+export function hottestMovie<T = MovieInfo[]>() {
+  return request<T>({
+    url: '/hottestMovieRecommend'
+  }) 
+}
