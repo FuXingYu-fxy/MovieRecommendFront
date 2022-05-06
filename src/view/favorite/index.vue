@@ -1,25 +1,66 @@
-<script lang="ts" setup>
-import { NSpace, NCard} from "naive-ui";
-import picture from "/1.jpg";
-import Empty from "@/components/Empty.vue";
+<script lang="ts">
+import {defineComponent} from "vue";
+import { mapGetters, mapMutations } from "vuex";
+import { NSpace, NCard } from "naive-ui";
+import { queryFavoriteMovieById } from "@/api/movie";
 import ImageContainer from "@/components/ImageContainer.vue";
-// import {getMovieInfo} from "@/api/recommend";
+import type { MovieInfo } from "@/api/recommend";
+interface Data {
+  movieData: MovieInfo[];
+}
+export default defineComponent({
+  components: {
+    ImageContainer,
+    NSpace,
+    NCard,
+  },
+  data() {
+    return {
+      movieData: [],
+    } as Data;
+  },
+  async mounted() {
+     const data = await queryFavoriteMovieById<MovieInfo[]>({
+      id: this.userId,
+    }, this.requestUpdated);
 
+      this.movieData = data.map(item => {
+        const root = import.meta.env.VITE_BASE_URL
+        return {
+          ...item,
+          cover: `${root}/cover/${item.cover}`,
+          poster: `${root}/poster/${item.poster}`,
+        }
+      });
+      if (this.requestUpdated) {
+        this.toggleRequestUpdated(false);
+      }
+  },
+  computed: {
+    ...mapGetters("user", ["userId"]),
+    ...mapGetters(["requestUpdated"]),
+  },
+  methods: {
+    ...mapMutations({toggleRequestUpdated: "TOGGLE_REQUEST_UPDATED"})
+  }
+})
 
 </script>
 
 <template>
   <n-card>
-    <!-- <Empty v-if="data.length === 0"></Empty> -->
-    <n-space justify="space-around">
+    <n-space v-if="movieData.length" justify="space-around">
       <image-container
-        v-for="item of 50"
-        :key="item"
-        :src="picture"
-        title="蜘蛛侠3: 英雄无归"
-        description="故事发生在复仇者联盟3: 终局之战后。闪烁事件已发生5年, 地球上的秩序已恢复正常, 但是随着多元宇宙的开启, 越来越多的人对地球这块宝地虎视眈眈"
+        v-for="movie of movieData"
+        :key="movie.id"
+        :id="movie.id"
+        :poster="movie.poster"
+        :cover="movie.cover"
+        :title="movie.title_zh || movie.title_cn"
+        :description="movie.description"
       />
     </n-space>
+    <span v-else>这里空空如也哦~~</span>
   </n-card>
 </template>
 

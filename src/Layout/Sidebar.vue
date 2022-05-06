@@ -11,17 +11,18 @@ const menuOptions = computed(() => useNaiveUiMenuOptions(routes))
 const store = useStore();
 const route = useRoute();
 const activeMenu = computed(() => (route.name as string))
+const collapsed = computed(() => store.state.collapsed);
 
 </script>
 <template>
   <router-link to="/">
-    <h1><n-gradient-text>电影推荐系统</n-gradient-text></h1>
+    <h1 v-show="!collapsed"><n-gradient-text>电影推荐系统</n-gradient-text></h1>
   </router-link>
   <n-menu
     mode="vertical"
     :value="activeMenu"
     :options="menuOptions"
-    :collapsed="store.state.collapsed"
+    :collapsed="collapsed"
   />
 </template>
 

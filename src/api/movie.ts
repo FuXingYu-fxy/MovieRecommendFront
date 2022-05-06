@@ -21,3 +21,35 @@ export function updateRating(params: Params) {
     method: 'post'
   })
 }
+
+export function addUserFavoriteMovie(params: Params) {
+  return request({
+    url: '/addUserFavoriteMovie',
+    method: 'post',
+    data: params
+  })
+}
+
+export function queryFavoriteMovieById<T = any>(params: {id: number}, update = false) {
+  // userId
+  return request<T>({
+    url: '/queryFavoriteMovieById',
+    params
+  }, update)
+}
+
+export function delUserFavoriteMovie(params: Params) {
+  return request({
+    url: '/delUserFavoriteMovie',
+    method: 'post',
+    data: params
+  })
+}
+
+export function queryFavoriteMovie<T = any>(params: Params) {
+  return request<T>({
+    url: '/queryFavoriteMovie',
+    method: 'post',
+    data: params
+  })
+}

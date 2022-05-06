@@ -13,15 +13,20 @@ const storeModules = Object.keys(modules).reduce((myModules, path) => {
 
 const store = createStore<RootStateTypes>({
   state: {
-    collapsed: true
+    collapsed: true,
+    requestUpdated: false,
   },
   mutations: {
     TOGGLE_COLLAPSED(state, collapsed: boolean) {
       state.collapsed = collapsed
+    },
+    TOGGLE_REQUEST_UPDATED(state, requestUpdated: boolean) {
+      state.requestUpdated = requestUpdated
     }
   },
   getters: {
-    collapsed: (state) => state.collapsed
+    collapsed: (state) => state.collapsed,
+    requestUpdated: (state) => state.requestUpdated,
   },
   modules: storeModules
 });

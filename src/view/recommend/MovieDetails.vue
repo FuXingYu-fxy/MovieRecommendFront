@@ -1,8 +1,18 @@
 <script lang="ts" setup>
-import { NCard, NText, NRate } from "naive-ui";
-import { queryRating, updateRating } from "@/api/movie";
+import { NCard, NText, NRate, NSpace, NButton, NIcon } from "naive-ui";
+import { 
+  addUserFavoriteMovie, 
+  queryRating, 
+  updateRating, 
+  delUserFavoriteMovie, 
+  queryFavoriteMovie 
+} from "@/api/movie";
 import useStore from "@/hooks/store";
-import { ref } from "vue";
+import { 
+  ref, 
+  computed 
+} from "vue";
+import {CheckmarkCircleOutline, AddCircleOutline} from "@vicons/ionicons5";
 const store = useStore();
 const props = defineProps<{
   id: string;
@@ -13,23 +23,45 @@ const props = defineProps<{
 }>();
 const rate = ref(0);
 const readonly = ref(false);
+const userId = computed<number>(() => store.getters["user/userId"]);
+
 const handleChangeRate = (val: number) => {
   updateRating({
-    userId: store.getters["user/userId"],
+    userId: userId.value,
     movieId: Number(props.id),
-    rating: val
-  }).then(res => {
-    console.log(res)
-  })
-  rate.value = val;
+    rating: val,
+  }).then((res) => {
+    // TODO
+    console.log(res);
+    rate.value = val;
+  });
 };
 queryRating({
-  userId: store.getters["user/userId"],
+  userId: userId.value,
   movieId: Number(props.id),
-}).then(({rating}) => {
+}).then(({ rating }) => {
   rate.value = rating;
-  readonly.value = Boolean(rating)
+  readonly.value = Boolean(rating);
 });
+
+const isWatchLater = ref(false);
+queryFavoriteMovie<{movie_id: number}[]>({
+  userId: userId.value,
+  movieId: Number(props.id)
+}).then(res => {
+  console.log('queryFavoriteMovie', res);
+  isWatchLater.value = Boolean(res.length);
+})
+const addWatchLater = () => {
+  const requestApi = isWatchLater.value ? delUserFavoriteMovie : addUserFavoriteMovie;
+  requestApi({
+    userId: store.getters["user/userId"],
+    movieId: Number(props.id),
+  }).then(() => {
+    isWatchLater.value = !isWatchLater.value;
+    store.commit('TOGGLE_REQUEST_UPDATED', true);
+  });
+}
 </script>
 <template>
   <n-card>
@@ -42,7 +74,17 @@ queryRating({
           <span>动作冒险</span>
           <p>剧情简介</p>
           <p>{{ description }}</p>
-          <p>看过这部电影？ 给个<n-text type="success">评分吧</n-text></p>
+          <n-space justify="space-between">
+            <p>看过这部电影？ 给个<n-text type="success">评分吧</n-text></p>
+            <n-button text size="large" @click="addWatchLater" :title="isWatchLater ? '已添加到稍后再看' : '添加到稍后再看'">
+              <template #icon>
+                <n-icon>
+                  <checkmark-circle-outline v-if="isWatchLater" />
+                  <add-circle-outline v-else />
+                </n-icon>
+              </template>
+            </n-button>
+          </n-space>
           <n-rate
             :readonly="readonly"
             allow-half
