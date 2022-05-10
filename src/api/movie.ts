@@ -53,3 +53,21 @@ export function queryFavoriteMovie<T = any>(params: Params) {
     data: params
   })
 }
+
+interface SearchParams {
+  key: string;
+}
+
+export function outsiteSearch<T = any>(params: SearchParams) {
+  return request<T>({
+    url: '/outsiteSearch',
+    params
+  })
+}
+
+export function search<T = any>(params: SearchParams) {
+  return request<T>({
+    url: '/search',
+    params,
+  })
+}

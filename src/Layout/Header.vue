@@ -32,6 +32,7 @@ const router = useRouter()
 const message = useMessage();
 const props = defineProps<Props>();
 const emit = defineEmits(["update:collapsed"]);
+const search = ref('');
 
 const expand = computed<boolean>({
   get() {
@@ -70,9 +71,15 @@ const gotoGithub = () => {
 };
 
 const gotoSetting = () => {
-  router.push({name: 'SystemSetting'})
+  router.push({name: 'SystemSetting'});
 }
 
+const jump = () => {
+  if (search.value === '') {
+    return;
+  }
+  router.push({name: 'SearchResult', query: {key: search.value}});
+}
 // const railStyle = useRailStyle("rgb(158,158,158)", "rgb(58,58,58)");
 </script>
 <template>
@@ -81,7 +88,7 @@ const gotoSetting = () => {
       <n-switch v-model:value="expand">
         <template #unchecked> 打开菜单 </template>
       </n-switch>
-      <n-input placeholder="搜索" size="small" round>
+      <n-input placeholder="搜索" size="small" round v-model:value="search" @keyup.enter="jump">
         <template #prefix>
           <n-icon :component="MdSearch" />
         </template>
