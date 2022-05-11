@@ -1,6 +1,8 @@
 <script lang="ts">
 import fallbackImg from "/fallback.jpg";
 import { defineComponent } from "vue";
+import { mapGetters } from "vuex";
+import { updateRating } from "@/api/movie";
 export default defineComponent({
   props: {
     cover: {
@@ -10,10 +12,11 @@ export default defineComponent({
     title: {
       type: String,
       default: "",
+      required: true
     },
     description: {
       type: String,
-      default: "",
+      default: "抱歉，该电影还没有任何简介",
     },
     width: {
       type: Number,
@@ -21,9 +24,16 @@ export default defineComponent({
     },
     id: {
       type: Number,
+      required: true,
     },
     poster: {
       type: String,
+      required: true,
+    }
+  },
+  data() {
+    return {
+      timer: -1,
     }
   },
   methods: {
@@ -39,13 +49,35 @@ export default defineComponent({
         },
       });
     },
+    handleMouseEnter() {
+      this.timer = (setTimeout(() => {
+        this.timer = -1;
+        // 鼠标悬停超过1.5s, 认为用户对其有兴趣
+        updateRating({
+          userId: this.userId,
+          movieId: this.id,
+          implicitRating: 1
+        })
+      }, 2000)) as unknown as number;
+    },
+    handleMouseLeave() {
+      if (this.timer !== -1) {
+        clearTimeout(this.timer);
+        this.timer = -1;
+      }
+    }
   },
+  computed: {
+    ...mapGetters("user", ["userId"]),
+  }
 });
 </script>
 
 <template>
   <div
     @click="jumpToMovieDetails"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
     class="img-wrapper"
     :style="`width: ${width ? width + 'px' : ''}`"
   >
