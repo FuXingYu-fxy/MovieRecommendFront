@@ -87,7 +87,7 @@ export default defineComponent({
     </n-space>
     <div v-else>
       <n-space v-if="outsiteResult.length">
-        <a v-for="item of outsiteResult" :key="item.href" :href="item.href">
+        <a class="outsite-link" v-for="item of outsiteResult" :key="item.href" :href="item.href">
           {{ item.title }}
         </a>
       </n-space>
@@ -102,4 +102,9 @@ export default defineComponent({
   </n-card>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.outsite-link {
+  font-size: 2em;
+  color: white;
+}
+</style>

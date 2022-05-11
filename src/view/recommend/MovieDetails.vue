@@ -22,26 +22,26 @@ const props = defineProps<{
   description: string;
 }>();
 const rate = ref(0);
-const readonly = ref(false);
 const userId = computed<number>(() => store.getters["user/userId"]);
 
 const handleChangeRate = (val: number) => {
   updateRating({
     userId: userId.value,
     movieId: Number(props.id),
-    rating: val,
+    rating: val
   }).then((res) => {
     // TODO
     console.log(res);
     rate.value = val;
   });
 };
+
+// get 请求传入的参数都被视作字符串
 queryRating({
-  userId: userId.value,
-  movieId: Number(props.id),
+  userId: String(userId.value),
+  movieId: props.id,
 }).then(({ rating }) => {
   rate.value = rating;
-  readonly.value = Boolean(rating);
 });
 
 const isWatchLater = ref(false);
@@ -86,7 +86,6 @@ const addWatchLater = () => {
             </n-button>
           </n-space>
           <n-rate
-            :readonly="readonly"
             allow-half
             :value="rate"
             :on-update:value="handleChangeRate"
