@@ -10,17 +10,26 @@ import {
 import useStore from "@/hooks/store";
 import { 
   ref, 
-  computed 
+  computed, 
+  onMounted,
+  onUnmounted,
 } from "vue";
 import {CheckmarkCircleOutline, AddCircleOutline} from "@vicons/ionicons5";
+import useActionCapture from "@/hooks/actionCapture";
 const store = useStore();
 const props = defineProps<{
-  id: string;
+  id: number| string;
   poster: string;
   cover: string;
   title: string;
   description: string;
 }>();
+// 位于该页面8秒后, 认定用户对其有潜在兴趣
+const [start, end, updateImplicit] = useActionCapture(props.id as number, 8000, 3);
+// 挂在完毕后就开始计时
+onMounted(start);
+onUnmounted(end);
+
 const rate = ref(0);
 const userId = computed<number>(() => store.getters["user/userId"]);
 
@@ -39,7 +48,7 @@ const handleChangeRate = (val: number) => {
 // get 请求传入的参数都被视作字符串
 queryRating({
   userId: String(userId.value),
-  movieId: props.id,
+  movieId: props.id as string,
 }).then(({ rating }) => {
   rate.value = rating;
 });
@@ -49,7 +58,6 @@ queryFavoriteMovie<{movie_id: number}[]>({
   userId: userId.value,
   movieId: Number(props.id)
 }).then(res => {
-  console.log('queryFavoriteMovie', res);
   isWatchLater.value = Boolean(res.length);
 })
 const addWatchLater = () => {
@@ -60,6 +68,8 @@ const addWatchLater = () => {
   }).then(() => {
     isWatchLater.value = !isWatchLater.value;
     store.commit('TOGGLE_REQUEST_UPDATED', true);
+    // 认定用户对其有潜在兴趣
+    updateImplicit(5);
   });
 }
 </script>

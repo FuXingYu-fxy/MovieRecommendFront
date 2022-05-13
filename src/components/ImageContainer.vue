@@ -1,83 +1,44 @@
-<script lang="ts">
+<script lang="ts" setup>
 import fallbackImg from "/fallback.jpg";
-import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
-import { updateRating } from "@/api/movie";
-export default defineComponent({
-  props: {
-    cover: {
-      type: String,
-      default: fallbackImg,
-    },
-    title: {
-      type: String,
-      default: "",
-      required: true
-    },
-    description: {
-      type: String,
-      default: "抱歉，该电影还没有任何简介",
-    },
-    width: {
-      type: Number,
-      default: 200,
-    },
-    id: {
-      type: Number,
-      required: true,
-    },
-    poster: {
-      type: String,
-      required: true,
-    }
-  },
-  data() {
-    return {
-      timer: -1,
-    }
-  },
-  methods: {
-    jumpToMovieDetails() {
-      this.$router.push({
-        name: "MovieDetails",
-        params: {
-          id: this.id,
-          poster: this.poster,
-          cover: this.cover,
-          title: this.title,
-          description :this.description,
-        },
-      });
-    },
-    handleMouseEnter() {
-      this.timer = (setTimeout(() => {
-        this.timer = -1;
-        // 鼠标悬停超过1.5s, 认为用户对其有兴趣
-        updateRating({
-          userId: this.userId,
-          movieId: this.id,
-          implicitRating: 1
-        })
-      }, 2000)) as unknown as number;
-    },
-    handleMouseLeave() {
-      if (this.timer !== -1) {
-        clearTimeout(this.timer);
-        this.timer = -1;
-      }
-    }
-  },
-  computed: {
-    ...mapGetters("user", ["userId"]),
-  }
+import { useRouter } from "vue-router";
+import useActionCapture from "@/hooks/actionCapture";
+interface Props {
+  cover?: string;
+  title?: string;
+  description?: string;
+  width?: number;
+  poster: string;
+  id: number;
+}
+const router = useRouter();
+const props = withDefaults(defineProps<Props>(), {
+  cover: fallbackImg,
+  title: "",
+  description: "抱歉，该电影还没有任何简介",
+  width: 200,
 });
+const [start, end] = useActionCapture(props.id);
+
+const jumpToMovieDetails = () => {
+  end();
+  router.push({
+    name: "MovieDetails",
+    params: {
+      id: props.id,
+      poster: props.poster,
+      cover: props.cover,
+      title: props.title,
+      description: props.description,
+    }
+  })
+}
 </script>
 
 <template>
   <div
     @click="jumpToMovieDetails"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
+    @mouseenter="start"
+    @mouseleave="end"
     class="img-wrapper"
     :style="`width: ${width ? width + 'px' : ''}`"
   >
