@@ -40,7 +40,7 @@ const store = useStore();
 
 <style lang="scss">
 .img-wrap {
-  transform: skewY(22deg) translateY(-135px);
+  transform: skewY(22deg) translateY(-187px);
 }
 .login-body {
   position: absolute;

@@ -100,5 +100,5 @@ export default defineComponent({
 });
 </script>
 <template>
-  <canvas ref="canvas" width="960" height="200"></canvas>
+  <canvas ref="canvas" width="1250" height="200"></canvas>
 </template>
