@@ -18,19 +18,19 @@ const store = useStore();
 <template>
   <div class="login-page">
     <div class="img-wrap">
-      <scroll-background :src="one"></scroll-background>
+      <scroll-background :src="one" :speed="1.25"></scroll-background>
       <scroll-background
         :src="two"
         direction="left"
         :speed="1.25"
       ></scroll-background>
-      <scroll-background :src="three" :speed="1.5"></scroll-background>
+      <scroll-background :src="three"></scroll-background>
       <scroll-background
         :src="four"
-        :speed="1.5"
+        :speed="1"
         direction="left"
       ></scroll-background>
-      <scroll-background :src="five" :speed="1.75"></scroll-background>
+      <scroll-background :src="five" :speed="1.25"></scroll-background>
     </div>
     <div class="login-body">
       <custom-form name='登录' />
