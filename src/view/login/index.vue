@@ -1,50 +1,57 @@
 <script lang="ts" setup>
-import { NForm, NFormItem, NInput, NButton } from "naive-ui";
-import { reactive, ref} from "vue";
+import scrollBackground from "@/view/login/scroll-background.vue";
+import customForm from "@/view/login/custom-form.vue";
+import { reactive, ref } from "vue";
 import { login } from "@/api/login";
 import useStore from "@/hooks/store";
 import { setToken } from "@/app/cookie";
+import one from "/0.png";
+import two from "/1.png";
+import three from "/2.png";
+import four from "/3.png";
+import five from "/4.png";
 const store = useStore();
 
-const isLoading = ref(false)
-const form = reactive({
-  id: "",
-  passsword: "",
-});
 
-const submit = async () => {
-  isLoading.value = true
-  try {
-    const {data: {data: {token}}} = await login({
-      id: Number(form.id),
-      passwd: form.passsword
-    });
-    store.commit('user/SET_TOKEN', token);
-    setToken(token)
-  } catch (err: any) {
-    console.log(err.message)
-  }
-  isLoading.value = false
-};
 </script>
 
 <template>
-  <n-form inline :label-width="80" :model="form">
-    <n-form-item label="id" :path="form.id">
-      <n-input v-model:value.number="form.id" placeholder="请输入用户id" />
-    </n-form-item>
-    <n-form-item label="password" :path="form.passsword">
-      <n-input
-        type="password"
-        placeholder="请输入密码"
-        @keyup.enter="submit"
-        v-model:value="form.passsword"
-      />
-    </n-form-item>
-    <n-form-item>
-      <n-button type="success" @click="submit" :loading="isLoading">提交</n-button>
-    </n-form-item>
-  </n-form>
+  <div class="login-page">
+    <div class="img-wrap">
+      <scroll-background :src="one"></scroll-background>
+      <scroll-background
+        :src="two"
+        direction="left"
+        :speed="1.25"
+      ></scroll-background>
+      <scroll-background :src="three" :speed="1.5"></scroll-background>
+      <scroll-background
+        :src="four"
+        :speed="1.5"
+        direction="left"
+      ></scroll-background>
+      <scroll-background :src="five" :speed="1.75"></scroll-background>
+    </div>
+    <div class="login-body">
+      <custom-form name='登录' />
+    </div>
+  </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.img-wrap {
+  transform: skewY(22deg) translateY(-135px);
+}
+.login-body {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.login-page {
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient( 135deg, #FAB2FF 10%, #1904E5 100%);
+  overflow: hidden;
+}
+</style>

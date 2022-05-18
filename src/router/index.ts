@@ -25,12 +25,12 @@ export const routes: Array<RouteRecordRaw> = shallowReactive([
         name: "Introduction",
         component: () => import("@/view/introduction.vue"),
       },
-      {
-        path: "login",
-        name: "Login",
-        component: () => import("@/view/login/index.vue"),
-      },
     ],
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/view/login/index.vue"),
   },
   ...modulesRoute,
 ]);

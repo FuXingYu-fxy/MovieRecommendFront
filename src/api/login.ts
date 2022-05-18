@@ -23,9 +23,9 @@ export function getUserInfo(requestBody: { token: string }) {
   });
 }
 
-export function login(requestBody: {id: number, passwd: string}) {
+export function login(requestBody: {account: string, password: string}) {
   return request({
-    url: '/login',
+    url: '/user/login',
     data: requestBody,
     method: 'post'
   })
