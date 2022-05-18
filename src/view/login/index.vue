@@ -1,18 +1,12 @@
 <script lang="ts" setup>
 import scrollBackground from "@/view/login/scroll-background.vue";
 import customForm from "@/view/login/custom-form.vue";
-import { reactive, ref } from "vue";
-import { login } from "@/api/login";
 import useStore from "@/hooks/store";
-import { setToken } from "@/app/cookie";
 import one from "/0.png";
 import two from "/1.png";
 import three from "/2.png";
 import four from "/3.png";
 import five from "/4.png";
-const store = useStore();
-
-
 </script>
 
 <template>

@@ -9,10 +9,14 @@ defineProps<Props>();
 const isLoading = ref(false);
 const form = reactive({
   account: "",
-  passsword: "",
+  password: "",
 });
 const submit = async () => {
+  isLoading.value = true;
   console.log(form);
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 5000);
 };
 const formRules = {
   account: {
@@ -45,7 +49,7 @@ const formRules = {
       </n-form-item>
       <n-form-item class="tap" label="密码: " path="password">
         <n-input
-          v-model:value="form.passsword"
+          v-model:value="form.password"
           type="password"
           placeholder="请输入密码"
           style="color: black;"
@@ -61,7 +65,7 @@ const formRules = {
       </n-form-item>
     </n-form>
     <div class="group-button">
-      <n-button block @click="submit" type="primary" color="#05d28d"
+      <n-button :loading="isLoading" block @click="submit" type="primary" color="#05d28d"
         >登录</n-button
       >
       <span class="text">or</span>
