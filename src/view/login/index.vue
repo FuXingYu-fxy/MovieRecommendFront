@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import scrollBackground from "@/view/login/scroll-background.vue";
 import customForm from "@/view/login/custom-form.vue";
-import useStore from "@/hooks/store";
 import one from "/0.png";
 import two from "/1.png";
 import three from "/2.png";
@@ -12,22 +11,22 @@ import five from "/4.png";
 <template>
   <div class="login-page">
     <div class="img-wrap">
-      <scroll-background :src="one" :speed="1.25"></scroll-background>
+      <scroll-background :src="one" :speed="0.75"></scroll-background>
       <scroll-background
         :src="two"
         direction="left"
-        :speed="1.25"
+        :speed="0.4"
       ></scroll-background>
-      <scroll-background :src="three"></scroll-background>
+      <scroll-background :src="three" :speed="0.65"></scroll-background>
       <scroll-background
         :src="four"
-        :speed="1"
         direction="left"
+        :speed="0.5"
       ></scroll-background>
-      <scroll-background :src="five" :speed="1.25"></scroll-background>
+      <scroll-background :src="five" :speed="0.5"></scroll-background>
     </div>
     <div class="login-body">
-      <custom-form name='登录' />
+      <custom-form></custom-form>
     </div>
   </div>
 </template>

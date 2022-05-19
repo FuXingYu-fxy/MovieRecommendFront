@@ -1,32 +1,33 @@
 import request from "@/app/request";
-import type {AxiosResponse} from "axios"
 interface UserInfo {
-  roles: string[];
-  token: string;
-  userId: string;
+  userId: number;
+  account: string;
+  pass: boolean;
 }
-export function getUserInfo(requestBody: { token: string }) {
-  // return request({
-  //   url: '/getUserInfo',
-  //   data: requestBody
-  // })
-
-  return new Promise<AxiosResponse<UserInfo>>((resolve) => {
-    setTimeout(() => {
-      const response = {
-        data: {
-          roles: ['admin', 'editor'],
-        }
-      }
-      resolve(response);
-    }, 2000);
-  });
+export function getUserInfo<T = UserInfo>(requestBody: { token: string }) {
+  return request<T>({
+    url: '/user/info',
+    data: requestBody,
+    method: 'post'
+  })
 }
 
-export function login(requestBody: {account: string, password: string}) {
-  return request({
+interface RequestBody {
+  account: string;
+  password: string;
+}
+export function login<T = any>(requestBody: RequestBody) {
+  return request<T>({
     url: '/user/login',
     data: requestBody,
     method: 'post'
+  })
+}
+
+export function registry<T = any>(requestBody: RequestBody) {
+  return request<T>({
+    url: '/user/registry',
+    data: requestBody,
+    method: 'post',
   })
 }

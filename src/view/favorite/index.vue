@@ -20,10 +20,10 @@ export default defineComponent({
     } as Data;
   },
   async mounted() {
+    console.log(this.$store);
      const data = await queryFavoriteMovieById<MovieInfo[]>({
       id: this.userId,
     }, this.requestUpdated);
-
       this.movieData = data.map(item => {
         const root = import.meta.env.VITE_BASE_URL
         return {
