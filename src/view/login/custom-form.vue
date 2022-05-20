@@ -130,7 +130,7 @@ const formRules = {
           v-model:value="formData.password"
           type="password"
           placeholder="请输入密码"
-          style="color: black"
+		  @keyup.enter="submit"
           show-password-on="click"
         >
           <template #password-visible-icon>

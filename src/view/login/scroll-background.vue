@@ -100,5 +100,11 @@ export default defineComponent({
 });
 </script>
 <template>
-  <canvas ref="canvas" width="1250" height="200"></canvas>
+  <canvas @mouseleave="draw" @mouseenter="cancelAnimation" ref="canvas" width="1250" height="200"></canvas>
 </template>
+
+<style>
+canvas {
+  cursor: pointer;
+}
+</style>

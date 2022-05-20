@@ -12,6 +12,7 @@ interface Data {
   result: MovieInfo[];
   outsiteResult: Movie[];
   key: string;
+  isLoading: boolean;
 }
 export default defineComponent({
   components: {
@@ -27,6 +28,7 @@ export default defineComponent({
       result: [],
       outsiteResult: [],
       key: "",
+      isLoading: false,
     };
   },
   watch: {
@@ -44,13 +46,18 @@ export default defineComponent({
       if (key === "") {
         return;
       }
-      const data = await outsiteSearch<Movie[]>({
-        key: encodeURIComponent(key),
-      });
-      this.outsiteResult = data.map((item) => {
-        item.href = `https://www.themoviedb.org${item.href}`;
-        return item;
-      });
+      this.isLoading = true;
+      try {
+        const data = await outsiteSearch<Movie[]>({
+          key: encodeURIComponent(key),
+        });
+        this.outsiteResult = data.map((item) => {
+          item.href = `https://www.themoviedb.org${item.href}`;
+          return item;
+        });
+      } finally {
+        this.isLoading = false;
+      }
     },
     async search(key: string) {
       if (key === "") {
@@ -93,7 +100,7 @@ export default defineComponent({
       </n-space>
       <n-empty v-else size="large" description="抱歉、该电影本站未收录哦">
         <template #extra>
-          <n-button size="small" @click="searchOutsite(key)">
+          <n-button size="small" :loading="isLoading" @click="searchOutsite(key)">
             尝试站外搜索
           </n-button>
         </template>

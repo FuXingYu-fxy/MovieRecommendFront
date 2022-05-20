@@ -9,6 +9,7 @@ import {
   useMessage,
   NDropdown,
 } from "naive-ui";
+import useStore from "@/hooks/store";
 import {
   MdSearch,
   IosContact,
@@ -27,7 +28,7 @@ import {useRouter} from "vue-router";
 interface Props {
   collapsed: boolean;
 }
-
+const store = useStore();
 const router = useRouter()
 const message = useMessage();
 const props = defineProps<Props>();
@@ -44,8 +45,15 @@ const expand = computed<boolean>({
 });
 
 const iconSize = 30;
-const handleSelect = (key: string | number) => {
-  message.info(String(key));
+const handleSelect = async (key: string) => {
+  message.info(key);
+  if (key === 'logout') {
+    // 退出登录
+	await store.dispatch("user/resetToken");
+    await store.dispatch("user/resetUserInfo");
+	// 清除用户数据后再跳转到登陆页面
+	router.push({name: 'Login'});
+  }
 };
 
 const options = ref([

@@ -8,7 +8,7 @@ interface ResponseMsg {
 }
 const api = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL as string,
-  timeout: 10000,
+  timeout: 20000,
 });
 const lru = new QuickLRU({
   maxSize: 80,

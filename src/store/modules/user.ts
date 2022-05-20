@@ -34,7 +34,7 @@ const user: Module<User, RootStateTypes> = {
     account: state => state.account,
   },
   mutations: {
-    SET_ROLE(state, roles: Array<string>) {
+    SET_ROLES(state, roles: Array<string>) {
       state.roles = roles;
     },
     SET_TOKEN(state, token: string) {
@@ -75,7 +75,11 @@ const user: Module<User, RootStateTypes> = {
       commit("SET_TOKEN", "")
       commit("SET_ROLES", [])
       removeToken()
-    }
+    },
+	async resetUserInfo({commit}) {
+	  commit("SET_USER_ACCOUNT", "");
+	  commit("SET_USER_ID", -1);
+	}
   }
 }
 
