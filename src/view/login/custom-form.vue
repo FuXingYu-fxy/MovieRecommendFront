@@ -34,7 +34,6 @@ const formData = reactive({
 });
 const jumpRoute = () => {
   const target = (route.query.redirect || 'Fxy') as string;
-  console.log(target);
   setTimeout(() => {
     router.push({name: target});
   }, 500);

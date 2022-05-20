@@ -2,6 +2,7 @@ import request from "@/app/request";
 interface UserInfo {
   userId: number;
   account: string;
+  userName: string;
   pass: boolean;
 }
 export function getUserInfo<T = UserInfo>(requestBody: { token: string }) {

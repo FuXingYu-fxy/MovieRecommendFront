@@ -11,5 +11,7 @@ export const routeNameMap = {
   Login: "登录",
   AdminConfig: "管理员配置",
   Setting: "设置",
-  SystemSetting: "系统设置"
+  SystemSetting: "系统设置",
+  Profile: "配置文件",
+  EditProfile: "编辑用户文件",
 }

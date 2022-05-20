@@ -95,3 +95,9 @@ export function search<T = any>(params: SearchParams) {
     params,
   })
 }
+
+export function getAllTags<T = Array<{id: number, tag_name: string}>>() {
+  return request<T>({
+    url: '/tag_list',
+  })
+}

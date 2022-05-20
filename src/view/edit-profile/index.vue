@@ -1,0 +1,163 @@
+<script lang="ts" setup>
+import {
+  NCard,
+  NPageHeader,
+  NInput,
+  NSpace,
+  NTag,
+  NFormItem,
+  NButton,
+  useMessage,
+  NDivider,
+} from "naive-ui";
+import { reactive, ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import {
+  getUserPreference,
+  updatePreference,
+  updateUserInfo,
+} from "@/api/user";
+import { getAllTags } from "@/api/movie";
+import useStore from "@/hooks/store";
+const store = useStore();
+const router = useRouter();
+const message = useMessage();
+const back = () => {
+  router.back();
+};
+interface PreferenceResponse {
+  id: number;
+  tag_name: string;
+}
+const preferList = ref<PreferenceResponse[]>([]);
+const isLoading = ref(false);
+
+const curId = ref<number>(-1);
+const userId = computed(() => store.getters["user/userId"]);
+
+const formData = reactive<{
+  userName: string;
+  hobbies: PreferenceResponse[];
+}>({
+  userName: store.getters["user/userName"],
+  hobbies: [],
+});
+const save = async () => {
+  isLoading.value = true;
+  const preference = formData.hobbies.map((item) => item.id);
+  // 更新偏好
+  try {
+    await updatePreference({
+      userId: userId.value,
+      preference,
+    });
+    // 更新用户名
+    const userName = formData.userName || store.getters["user/userName"];
+    await updateUserInfo({
+      userId: userId.value,
+      userInfo: {
+        userName,
+      },
+    });
+    message.success("修改成功");
+    // BUG修改成功后要刷新用户信息
+    setTimeout(back, 500);
+  } catch (err: any) {
+    message.error(err.message);
+  } finally {
+    isLoading.value = false;
+  }
+};
+const colorList = [
+  "#27ea27",
+  "#4b296e",
+  "#aca652",
+  "#3ebfd9",
+  "#c1bece",
+  "#9aa27b",
+  "#d6a460",
+  "#d6ab00",
+  "#eb13f2",
+];
+getUserPreference({
+  userId: userId.value,
+}).then((res) => {
+  formData.hobbies = res;
+  getAllTags().then((res) => {
+    const ids = formData.hobbies.map((v) => v.id);
+    preferList.value = res.filter((item) => !ids.includes(item.id));
+  });
+});
+
+const addPreference = (id: number) => {
+  const index = preferList.value.findIndex((item) => item.id === id);
+  const [el] = preferList.value.splice(index, 1);
+  formData.hobbies.push(el);
+};
+const cancelSelect = () => {
+  const index = formData.hobbies.findIndex((item) => item.id === curId.value);
+  const [el] = formData.hobbies.splice(index, 1);
+  preferList.value.push(el);
+};
+</script>
+<template>
+  <n-card>
+    <n-page-header subtitle="爱你的人越懂你" @back="back">
+      <template #title>
+        <a style="text-decoration: none; color: inherit">编辑用户资料</a>
+      </template>
+    </n-page-header>
+    <n-divider />
+    <n-form-item label="用户名">
+      <n-input
+        v-model:value="formData.userName"
+        placeholder="请输入您的用户名"
+        maxlength="20"
+        show-count
+        autosize
+        style="min-width: 200px"
+      />
+    </n-form-item>
+
+    <n-form-item label="我的偏好">
+      <n-space>
+        <n-tag
+          v-for="(item, i) of formData.hobbies"
+          :color="{
+            textColor: colorList[i % colorList.length],
+            borderColor: colorList[i % colorList.length],
+          }"
+          :key="item.id"
+          closable
+          @click.capture="curId = item.id"
+          @close="cancelSelect"
+          round
+          class="tag"
+          size="small"
+          >{{ item.tag_name }}</n-tag
+        >
+      </n-space>
+    </n-form-item>
+    <p>添加你的偏好</p>
+    <n-card>
+      <n-tag
+        v-for="item of preferList"
+        class="alternative"
+        :key="item.id"
+        @click="addPreference(item.id)"
+        >{{ item.tag_name }}</n-tag
+      >
+    </n-card>
+    <n-button style="margin-top: 20px" type="primary" @click="save" :loading="isLoading">保存修改</n-button>
+  </n-card>
+</template>
+
+<style lang="scss" scoped>
+.alternative {
+  cursor: pointer;
+  margin: 1px;
+}
+.tag {
+  user-select: none;
+}
+</style>

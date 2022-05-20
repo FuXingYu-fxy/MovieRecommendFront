@@ -6,7 +6,6 @@ import {
   NIcon,
   NSpace,
   NButton,
-  useMessage,
   NDropdown,
 } from "naive-ui";
 import useStore from "@/hooks/store";
@@ -30,7 +29,6 @@ interface Props {
 }
 const store = useStore();
 const router = useRouter()
-const message = useMessage();
 const props = defineProps<Props>();
 const emit = defineEmits(["update:collapsed"]);
 const search = ref('');
@@ -46,13 +44,14 @@ const expand = computed<boolean>({
 
 const iconSize = 30;
 const handleSelect = async (key: string) => {
-  message.info(key);
   if (key === 'logout') {
     // 退出登录
-	await store.dispatch("user/resetToken");
+    await store.dispatch("user/resetToken");
     await store.dispatch("user/resetUserInfo");
-	// 清除用户数据后再跳转到登陆页面
-	router.push({name: 'Login'});
+    // 清除用户数据后再跳转到登陆页面
+    router.push({name: 'Login'});
+  } else if (key === 'editProfile') {
+    router.push({name: 'EditProfile'});
   }
 };
 
