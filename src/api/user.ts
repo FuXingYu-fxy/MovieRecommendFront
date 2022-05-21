@@ -41,3 +41,12 @@ export function updateUserInfo(requestBody: UpdateUserInfo) {
     data: requestBody,
   });
 }
+
+
+export function isPasswordValid(requestBody: {userId: number; password: string}) {
+  return request<{pass: boolean;}>({
+    url: "/user/checkPassword",
+    method: "POST",
+    data: requestBody,
+  })
+}

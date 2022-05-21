@@ -129,7 +129,7 @@ const formRules = {
           v-model:value="formData.password"
           type="password"
           placeholder="请输入密码"
-		  @keyup.enter="submit"
+          @keyup.enter="submit"
           show-password-on="click"
         >
           <template #password-visible-icon>
@@ -143,7 +143,7 @@ const formRules = {
     </n-form>
     <div class="group-button">
       <n-button
-        :loading="isLoging"
+        :disabled="isLoging"
         block
         @click="submit"
         type="primary"

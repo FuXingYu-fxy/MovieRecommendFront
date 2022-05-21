@@ -12,10 +12,12 @@ import {
 } from "naive-ui";
 import { reactive, ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import crypto from "@/tools/crypto";
 import {
   getUserPreference,
   updatePreference,
   updateUserInfo,
+  isPasswordValid,
 } from "@/api/user";
 import { getAllTags } from "@/api/movie";
 import useStore from "@/hooks/store";
@@ -36,14 +38,36 @@ const curId = ref<number>(-1);
 const userId = computed(() => store.getters["user/userId"]);
 
 const formData = reactive<{
+  newPassword: string;
+  password: string;
   userName: string;
   hobbies: PreferenceResponse[];
 }>({
   userName: store.getters["user/userName"],
   hobbies: [],
+  password: "",
+  newPassword: "",
 });
 const save = async () => {
   isLoading.value = true;
+  let encryptPassword = "";
+  if (formData.password) {
+    encryptPassword = crypto.encrypt(formData.password);
+    try {
+      const res = await isPasswordValid({
+        userId: userId.value,
+        password: encryptPassword,
+      });
+      passwordPass.value = res.pass;
+    } catch (err: any) {
+      passwordPass.value = false;
+      message.error(err.message);
+    }
+    if (!passwordPass.value) {
+      isLoading.value = false;
+      return;
+    }
+  }
   const preference = formData.hobbies.map((item) => item.id);
   // 更新偏好
   try {
@@ -53,14 +77,21 @@ const save = async () => {
     });
     // 更新用户名
     const userName = formData.userName || store.getters["user/userName"];
-    await updateUserInfo({
-      userId: userId.value,
-      userInfo: {
-        userName,
-      },
-    });
+    if (userName || formData.newPassword) {
+      const userInfo = {userName: "", password: ""};
+      if (userName) {
+        userInfo.userName = userName
+      }
+      if (formData.password && formData.newPassword) {
+        userInfo.password = crypto.encrypt(formData.newPassword);
+      }
+      await updateUserInfo({
+        userId: userId.value,
+        userInfo,
+      });
+      store.dispatch("user/getInfo");
+    }
     message.success("修改成功");
-    // BUG修改成功后要刷新用户信息
     setTimeout(back, 500);
   } catch (err: any) {
     message.error(err.message);
@@ -70,7 +101,7 @@ const save = async () => {
 };
 const colorList = [
   "#27ea27",
-  "#4b296e",
+  "#d44e85",
   "#aca652",
   "#3ebfd9",
   "#c1bece",
@@ -99,6 +130,24 @@ const cancelSelect = () => {
   const [el] = formData.hobbies.splice(index, 1);
   preferList.value.push(el);
 };
+
+const passwordPass = ref(true);
+interface Validation{
+  status: "error" | undefined;
+  msg: string | undefined;
+}
+const validation = computed((): Validation => {
+  if (passwordPass.value) {
+    return {
+      status: undefined,
+      msg: undefined,
+    };
+  }
+  return {
+    status: "error",
+    msg: "密码校验失败",
+  };
+});
 </script>
 <template>
   <n-card>
@@ -116,6 +165,33 @@ const cancelSelect = () => {
         show-count
         autosize
         style="min-width: 200px"
+      />
+    </n-form-item>
+
+    <n-form-item
+      label="修改密码"
+      :validation-status="validation.status"
+      :feedback="validation.msg"
+    >
+      <n-input
+        placeholder="请输入旧密码"
+        type="password"
+        maxlength="10"
+        show-count
+        show-password-on="mousedown"
+        autosize
+        style="min-width: 200px"
+        v-model:value="formData.password"
+      />
+      <n-input
+        placeholder="请输入新密码"
+        type="password"
+        maxlength="10"
+        show-count
+        show-password-on="mousedown"
+        v-model:value="formData.newPassword"
+        autosize
+        style="min-width: 200px; margin-left: 10px"
       />
     </n-form-item>
 
@@ -148,7 +224,13 @@ const cancelSelect = () => {
         >{{ item.tag_name }}</n-tag
       >
     </n-card>
-    <n-button style="margin-top: 20px" type="primary" @click="save" :loading="isLoading">保存修改</n-button>
+    <n-button
+      style="margin-top: 20px"
+      type="primary"
+      @click="save"
+      :loading="isLoading"
+      >保存修改</n-button
+    >
   </n-card>
 </template>
 
