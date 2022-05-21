@@ -1,13 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
-import {
-  NSwitch,
-  NInput,
-  NIcon,
-  NSpace,
-  NButton,
-  NDropdown,
-} from "naive-ui";
+import type { VNode } from "vue";
+import { NSwitch, NInput, NIcon, NSpace, NButton, NDropdown } from "naive-ui";
 import useStore from "@/hooks/store";
 import {
   MdSearch,
@@ -20,18 +14,17 @@ import {
   Pencil as EditIcon,
   LogOutOutline as LogoutIcon,
 } from "@vicons/ionicons5";
-import {renderIcon} from "@/tools/index"
-import {useRouter} from "vue-router";
-
+import { renderIcon } from "@/tools/index";
+import { useRouter } from "vue-router";
 
 interface Props {
   collapsed: boolean;
 }
 const store = useStore();
-const router = useRouter()
+const router = useRouter();
 const props = defineProps<Props>();
 const emit = defineEmits(["update:collapsed"]);
-const search = ref('');
+const search = ref("");
 
 const expand = computed<boolean>({
   get() {
@@ -43,19 +36,15 @@ const expand = computed<boolean>({
 });
 
 const iconSize = 30;
-const handleSelect = async (key: string) => {
-  if (key === 'logout') {
-    // 退出登录
-    await store.dispatch("user/resetToken");
-    await store.dispatch("user/resetUserInfo");
-    // 清除用户数据后再跳转到登陆页面
-    router.push({name: 'Login'});
-  } else if (key === 'editProfile') {
-    router.push({name: 'EditProfile'});
-  }
-};
 
-const options = ref([
+type Key = "profile" | "editProfile" | "logout";
+interface Options {
+  label: string;
+  key: Key;
+  icon: () => VNode;
+}
+
+const options = ref<Options[]>([
   {
     label: "用户资料",
     key: "profile",
@@ -73,20 +62,36 @@ const options = ref([
   },
 ]);
 
+const handleSelect = async (key: Key) => {
+  if (key === "logout") {
+    // 退出登录
+    await store.dispatch("user/resetToken");
+    await store.dispatch("user/resetUserInfo");
+    // 清除用户数据后再跳转到登陆页面
+    router.push({ name: "Login" });
+  } else if (key === "editProfile") {
+    router.push({ name: "EditProfile" });
+  } else if (key === "profile") {
+    router.push({ name: "UserProfile" });
+  } else {
+    let NOP: never = key;
+  }
+};
+
 const gotoGithub = () => {
   location.href = "https://github.com/FuXingYu-fxy/MovieRecommendFront";
 };
 
 const gotoSetting = () => {
-  router.push({name: 'SystemSetting'});
-}
+  router.push({ name: "SystemSetting" });
+};
 
 const jump = () => {
-  if (search.value === '') {
+  if (search.value === "") {
     return;
   }
-  router.push({name: 'SearchResult', query: {key: search.value}});
-}
+  router.push({ name: "SearchResult", query: { key: search.value } });
+};
 // const railStyle = useRailStyle("rgb(158,158,158)", "rgb(58,58,58)");
 </script>
 <template>
@@ -95,7 +100,13 @@ const jump = () => {
       <n-switch v-model:value="expand">
         <template #unchecked> 打开菜单 </template>
       </n-switch>
-      <n-input placeholder="搜索" size="small" round v-model:value="search" @keyup.enter="jump">
+      <n-input
+        placeholder="搜索"
+        size="small"
+        round
+        v-model:value="search"
+        @keyup.enter="jump"
+      >
         <template #prefix>
           <n-icon :component="MdSearch" />
         </template>
@@ -115,7 +126,12 @@ const jump = () => {
         </template>
       </n-button>
 
-      <n-dropdown show-arrow trigger="hover" :options="options" @select="handleSelect">
+      <n-dropdown
+        show-arrow
+        trigger="hover"
+        :options="options"
+        @select="handleSelect"
+      >
         <n-button text>
           <template #icon>
             <n-icon :component="IosContact" :size="iconSize" />

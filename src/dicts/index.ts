@@ -14,4 +14,5 @@ export const routeNameMap = {
   SystemSetting: "系统设置",
   Profile: "配置文件",
   EditProfile: "编辑用户文件",
+  UserProfile: "用户资料",
 }

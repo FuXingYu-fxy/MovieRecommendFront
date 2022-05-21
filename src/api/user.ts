@@ -1,7 +1,7 @@
 import request from "@/app/request";
-
+interface PreferenceTag { id: number; tag_name: string }
 export function getUserPreference<
-  T = { id: number; tag_name: string }[]
+  T = PreferenceTag[]
 >(requestBody: { userId: number }) {
   return request<T>({
     url: "/user/preference",
@@ -48,5 +48,20 @@ export function isPasswordValid(requestBody: {userId: number; password: string})
     url: "/user/checkPassword",
     method: "POST",
     data: requestBody,
+  })
+}
+
+export function watchedMovieTags(params: {userId: number}) {
+  return request<PreferenceTag[]>({
+    url: "/user/watchedMovieTags",
+    params,
+  })
+} 
+
+export function watchedMovieStatistic(requestBody: {userId: number}) {
+  return request<{watched: number; laterWatch: number}>({
+    url: "/user/watchedMovieCount",
+    data: requestBody,
+    method: "POST",
   })
 }

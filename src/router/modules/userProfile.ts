@@ -12,6 +12,11 @@ const route: RouteRecordRaw = {
       name: "EditProfile",
       component: () => import("@/view/edit-profile/index.vue"),
     },
+    {
+      path: "user-profile",
+      name: "UserProfile",
+      component: () => import("@/view/profile/index.vue"),
+    }
   ],
 };
 
