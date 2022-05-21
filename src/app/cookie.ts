@@ -1,7 +1,8 @@
 import cookie from "js-cookie"
 
 export function setToken(token: string) {
-  cookie.set('token', token);
+  // cookie 保存3天
+  cookie.set('token', token, {expires: 3});
 }
 
 export function getToken() {
