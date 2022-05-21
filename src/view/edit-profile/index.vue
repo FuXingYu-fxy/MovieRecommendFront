@@ -20,8 +20,10 @@ import {
   isPasswordValid,
 } from "@/api/user";
 import { getAllTags } from "@/api/movie";
-import useStore from "@/hooks/store";
+import useStore, {useUserInfo} from "@/hooks/store";
+
 const store = useStore();
+const user = useUserInfo();
 const router = useRouter();
 const message = useMessage();
 const back = () => {
@@ -35,7 +37,6 @@ const preferList = ref<PreferenceResponse[]>([]);
 const isLoading = ref(false);
 
 const curId = ref<number>(-1);
-const userId = computed(() => store.getters["user/userId"]);
 
 const formData = reactive<{
   newPassword: string;
@@ -55,7 +56,7 @@ const save = async () => {
     encryptPassword = crypto.encrypt(formData.password);
     try {
       const res = await isPasswordValid({
-        userId: userId.value,
+        userId: user.userId,
         password: encryptPassword,
       });
       passwordPass.value = res.pass;
@@ -72,11 +73,11 @@ const save = async () => {
   // 更新偏好
   try {
     await updatePreference({
-      userId: userId.value,
+      userId: user.userId,
       preference,
     });
     // 更新用户名
-    const userName = formData.userName || store.getters["user/userName"];
+    const userName = formData.userName || user.userName;
     if (userName || formData.newPassword) {
       const userInfo = {userName: "", password: ""};
       if (userName) {
@@ -86,7 +87,7 @@ const save = async () => {
         userInfo.password = crypto.encrypt(formData.newPassword);
       }
       await updateUserInfo({
-        userId: userId.value,
+        userId: user.userId,
         userInfo,
       });
       store.dispatch("user/getInfo");
@@ -111,7 +112,7 @@ const colorList = [
   "#eb13f2",
 ];
 getUserPreference({
-  userId: userId.value,
+  userId: user.userId,
 }).then((res) => {
   formData.hobbies = res;
   getAllTags().then((res) => {
