@@ -1,4 +1,5 @@
 import request from "@/app/request";
+import type {MovieInfo} from "@/api/recommend";
 interface Params {
   userId: string;
   movieId: string;
@@ -99,5 +100,23 @@ export function search<T = any>(params: SearchParams) {
 export function getAllTags<T = Array<{id: number, tag_name: string}>>() {
   return request<T>({
     url: '/tag_list',
+  })
+}
+
+interface QueryByPageBody {
+  current: number;
+  pageSize: number;
+  tagId: number;
+}
+
+interface Data {
+  movieData: MovieInfo[],
+  total: number,
+}
+export function queryMovieByPage(requestBody: QueryByPageBody) {
+  return request<Data>({
+    url: '/queryMovieByPage',
+    method: 'post',
+    data: requestBody,
   })
 }

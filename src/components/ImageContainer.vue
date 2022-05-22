@@ -40,7 +40,7 @@ const jumpToMovieDetails = () => {
     @mouseenter="start"
     @mouseleave="end"
     class="img-wrapper"
-    :style="`width: ${width ? width + 'px' : ''}`"
+    :style="`width: ${width}px`"
   >
     <img :src="cover" />
     <span class="title">{{ title }}</span>
