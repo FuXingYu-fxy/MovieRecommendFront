@@ -16,3 +16,28 @@ export const routeNameMap = {
   EditProfile: "编辑用户文件",
   UserProfile: "用户资料",
 }
+
+export const movieTagMap: {
+  [key: string]: string
+} = {
+  "Adventure": "冒险",
+  "Animation": "动画",
+  "Children": "儿童",
+  "Comedy": "喜剧",
+  "Fantasy": "奇幻",
+  "Romance": "浪漫",
+  "Drama": "戏剧",
+  "Action": "动作",
+  "Crime": "犯罪",
+  "Thriller": "惊悚",
+  "Horror": "恐怖",
+  "Mystery": "悬疑",
+  "Sci-Fi": "科幻",
+  "War": "战争",
+  "Musical": "音乐",
+  "Documentary": "纪录片",
+  "IMAX": "IMAX",
+  "Western": "西部",
+  "Film-Noir": "黑色电影",
+  "(no genres listed)": "未分类"
+}

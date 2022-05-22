@@ -11,6 +11,7 @@ import {
 import { getAllTags, queryMovieByPage } from "@/api/movie";
 import { ref, reactive, computed} from "vue";
 import ImageContainer from "@/components/ImageContainer.vue";
+import {movieTagMap} from "@/dicts";
 import type { MovieInfo } from "@/api/recommend";
 
 const tags = ref<{ id: number; tag_name: string }[]>([]);
@@ -18,7 +19,10 @@ const currentSelectedId = ref<number>(-1);
 const movieData = ref<MovieInfo[]>([]);
 let prevSelect: number;
 getAllTags().then((res) => {
-  const data = res;
+  const data = res.map(item => {
+    item.tag_name = movieTagMap[item.tag_name];
+    return item;
+  });
   data.push({ id: -1, tag_name: "展示全部" });
   tags.value = data;
 });

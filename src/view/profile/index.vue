@@ -16,6 +16,7 @@ import { useRouter } from "vue-router";
 import { ref, reactive } from "vue";
 import { useUserInfo } from "@/hooks/store";
 import { watchedMovieTags, watchedMovieStatistic } from "@/api/user";
+import { movieTagMap } from "@/dicts";
 
 const list = ref<Array<{ id: number; tag_name: string }>>([]);
 
@@ -30,7 +31,10 @@ const handleBack = () => {
 };
 
 watchedMovieTags({ userId: user.userId }).then((res) => {
-  list.value = res;
+  list.value = res.map(item => {
+    item.tag_name = movieTagMap[item.tag_name];
+    return item;
+  });
 });
 
 watchedMovieStatistic({

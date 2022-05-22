@@ -20,7 +20,8 @@ import {
   isPasswordValid,
 } from "@/api/user";
 import { getAllTags } from "@/api/movie";
-import useStore, {useUserInfo} from "@/hooks/store";
+import { movieTagMap } from "@/dicts";
+import useStore, { useUserInfo } from "@/hooks/store";
 
 const store = useStore();
 const user = useUserInfo();
@@ -79,9 +80,9 @@ const save = async () => {
     // 更新用户名
     const userName = formData.userName || user.userName;
     if (userName || formData.newPassword) {
-      const userInfo = {userName: "", password: ""};
+      const userInfo = { userName: "", password: "" };
       if (userName) {
-        userInfo.userName = userName
+        userInfo.userName = userName;
       }
       if (formData.password && formData.newPassword) {
         userInfo.password = crypto.encrypt(formData.newPassword);
@@ -114,10 +115,18 @@ const colorList = [
 getUserPreference({
   userId: user.userId,
 }).then((res) => {
-  formData.hobbies = res;
+  const list = res.map((item) => {
+    item.tag_name = movieTagMap[item.tag_name];
+    return item;
+  });
+  formData.hobbies = list;
   getAllTags().then((res) => {
+    const list = res.map((item) => {
+      item.tag_name = movieTagMap[item.tag_name];
+      return item;
+    });
     const ids = formData.hobbies.map((v) => v.id);
-    preferList.value = res.filter((item) => !ids.includes(item.id));
+    preferList.value = list.filter((item) => !ids.includes(item.id));
   });
 });
 
@@ -133,7 +142,7 @@ const cancelSelect = () => {
 };
 
 const passwordPass = ref(true);
-interface Validation{
+interface Validation {
   status: "error" | undefined;
   msg: string | undefined;
 }
