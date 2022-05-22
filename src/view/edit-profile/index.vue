@@ -116,14 +116,18 @@ getUserPreference({
   userId: user.userId,
 }).then((res) => {
   const list = res.map((item) => {
-    item.tag_name = movieTagMap[item.tag_name];
-    return item;
+    return {
+      id: item.id,
+      tag_name: movieTagMap[item.tag_name],
+    };
   });
   formData.hobbies = list;
   getAllTags().then((res) => {
     const list = res.map((item) => {
-      item.tag_name = movieTagMap[item.tag_name];
-      return item;
+      return {
+        id: item.id,
+        tag_name: movieTagMap[item.tag_name],
+      };
     });
     const ids = formData.hobbies.map((v) => v.id);
     preferList.value = list.filter((item) => !ids.includes(item.id));

@@ -32,8 +32,10 @@ const handleBack = () => {
 
 watchedMovieTags({ userId: user.userId }).then((res) => {
   list.value = res.map(item => {
-    item.tag_name = movieTagMap[item.tag_name];
-    return item;
+    return {
+      id: item.id,
+      tag_name: movieTagMap[item.tag_name],
+    };
   });
 });
 

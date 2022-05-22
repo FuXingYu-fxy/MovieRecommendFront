@@ -9,9 +9,9 @@ import {
   NPagination,
 } from "naive-ui";
 import { getAllTags, queryMovieByPage } from "@/api/movie";
-import { ref, reactive, computed} from "vue";
+import { ref, reactive, computed } from "vue";
 import ImageContainer from "@/components/ImageContainer.vue";
-import {movieTagMap} from "@/dicts";
+import { movieTagMap } from "@/dicts";
 import type { MovieInfo } from "@/api/recommend";
 
 const tags = ref<{ id: number; tag_name: string }[]>([]);
@@ -19,11 +19,13 @@ const currentSelectedId = ref<number>(-1);
 const movieData = ref<MovieInfo[]>([]);
 let prevSelect: number;
 getAllTags().then((res) => {
-  const data = res.map(item => {
-    item.tag_name = movieTagMap[item.tag_name];
-    return item;
+  const data = res.map((item) => {
+    return {
+      id: item.id,
+      tag_name: movieTagMap[item.tag_name],
+    };
   });
-  data.push({ id: -1, tag_name: "展示全部" });
+  data.unshift({ id: -1, tag_name: "显示全部电影" });
   tags.value = data;
 });
 const clickTag = (id: number) => {
@@ -52,7 +54,7 @@ const requestMovieData = async (current: number) => {
     tagId: currentSelectedId.value,
   };
   // try {
-  const {movieData: data, total} = await queryMovieByPage(body);
+  const { movieData: data, total } = await queryMovieByPage(body);
   if (data.length) {
     pagination.total = total;
     movieData.value = data.map((item) => {
