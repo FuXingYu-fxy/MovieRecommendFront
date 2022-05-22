@@ -1,5 +1,6 @@
 import { shallowReactive } from "vue";
 import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
+import {MdGlobe} from "@vicons/ionicons4";
 import Layout from "@/Layout/index.vue";
 
 // 自动导入 modules/ 下的文件
@@ -21,9 +22,10 @@ export const routes: Array<RouteRecordRaw> = shallowReactive([
         component: () => import("@/view/index.vue"),
       },
       {
-        path: "introduction",
-        name: "Introduction",
-        component: () => import("@/view/introduction.vue"),
+        path: "explore",
+        name: "Explore",
+        component: () => import("@/view/explore/index.vue"),
+        icon: MdGlobe
       },
     ],
   },

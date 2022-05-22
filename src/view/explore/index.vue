@@ -32,7 +32,7 @@ const clickTag = (id: number) => {
 const pagination = reactive({
   current: 1,
   total: 0,
-  pageSize: 10,
+  pageSize: 14,
 });
 
 const count = computed(() => {
@@ -69,20 +69,20 @@ const pageSizeChange = (pageSize: number) => {
 };
 const pageSizes = [
   {
-    value: 10,
-    label: "10 每页",
+    value: 14,
+    label: "14 每页",
   },
   {
-    value: 20,
-    label: "20 每页",
+    value: 21,
+    label: "21 每页",
   },
   {
-    value: 30,
-    label: "30 每页",
+    value: 35,
+    label: "35 每页",
   },
   {
-    value: 40,
-    label: "40 每页",
+    value: 56,
+    label: "56 每页",
   },
 ];
 requestMovieData(1);

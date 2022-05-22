@@ -1,5 +1,6 @@
 import type { RouteRecordRaw } from "vue-router";
 import Layout from "@/Layout/index.vue";
+import {IosPeople} from "@vicons/ionicons4";
 
 const route: RouteRecordRaw = {
   path: "/hottest",
@@ -10,6 +11,7 @@ const route: RouteRecordRaw = {
       path: "hottestRecommend",
       name: "HottestRecommend",
       component: () => import("@/view/hottest/index.vue"),
+      icon: IosPeople,
     }
   ]
 }

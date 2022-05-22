@@ -36,7 +36,6 @@ export function useRailStyle(
 
 function traverseRoute(route: RouteRecordRaw): MenuOption {
   const hasChildren = route.children && route.children.length;
-  // 如果
   const renderNode = hasChildren ? "span" : RouterLink;
   const menu: MenuOption = {
     label: () =>
@@ -56,7 +55,7 @@ function traverseRoute(route: RouteRecordRaw): MenuOption {
         }
       ),
     key: (route.name as string) || "no speific name",
-    icon: renderIcon(HomeOutline)
+    icon: renderIcon( route.icon || HomeOutline)
   };
   if (hasChildren) {
     menu.children = route.children!.filter(item => !item.hidden).map(traverseRoute)

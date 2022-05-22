@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from "vue-router";
+import {MdHeart} from "@vicons/ionicons4";
 import Layout from "@/Layout/index.vue";
 
 const route: RouteRecordRaw = {
@@ -9,7 +10,8 @@ const route: RouteRecordRaw = {
     {
       path: "favorite-movie",
       name: "FavoriteMovie",
-      component: () => import("@/view/favorite/index.vue")
+      component: () => import("@/view/favorite/index.vue"),
+      icon: MdHeart,
     },
   ]
 }

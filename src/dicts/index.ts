@@ -1,6 +1,6 @@
 export const routeNameMap = {
   Home: "首页",
-  Introduction: "介绍",
+  Explore: "探索",
   Hottest: "最热",
   HottestRecommend: "最热推荐",
   Recommend: "推荐",
