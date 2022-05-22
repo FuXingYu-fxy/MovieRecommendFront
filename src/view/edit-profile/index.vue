@@ -230,13 +230,17 @@ const validation = computed((): Validation => {
     </n-form-item>
     <p>添加你的偏好</p>
     <n-card>
-      <n-tag
-        v-for="item of preferList"
-        class="alternative"
-        :key="item.id"
-        @click="addPreference(item.id)"
-        >{{ item.tag_name }}</n-tag
-      >
+      <n-space>
+        <n-button
+          v-for="item of preferList"
+          class="alternative"
+          :key="item.id"
+          text
+          @click="addPreference(item.id)"
+        >
+          {{ item.tag_name }}
+        </n-button>
+      </n-space>
     </n-card>
     <n-button
       style="margin-top: 20px"

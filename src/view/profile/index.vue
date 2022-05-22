@@ -65,9 +65,11 @@ const jump = () => {
     </n-h3>
     <n-space vertical>
       <n-card>
-        <n-tag v-for="item of list" :key="item.id">
-          {{ item.tag_name }}
-        </n-tag>
+	    <n-space>
+		  <n-tag v-for="item of list" :key="item.id">
+			{{ item.tag_name }}
+	  	  </n-tag>
+		</n-space>
       </n-card>
 
       <n-statistic label="你一共观看了" tabular-nums>

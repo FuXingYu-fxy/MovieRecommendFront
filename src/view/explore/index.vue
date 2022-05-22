@@ -13,6 +13,7 @@ import { ref, reactive, computed } from "vue";
 import ImageContainer from "@/components/ImageContainer.vue";
 import { movieTagMap } from "@/dicts";
 import type { MovieInfo } from "@/api/recommend";
+import fallback from "/fallback.jpg";
 
 const tags = ref<{ id: number; tag_name: string }[]>([]);
 const currentSelectedId = ref<number>(-1);
@@ -59,9 +60,10 @@ const requestMovieData = async (current: number) => {
     pagination.total = total;
     movieData.value = data.map((item) => {
       const root = import.meta.env.VITE_BASE_URL;
+      const cover = `${root}/cover/${item.cover}`;
       return {
         ...item,
-        cover: `${root}/cover/${item.cover}`,
+        cover: item.cover ? cover : fallback,
         poster: `${root}/poster/${item.poster}`,
       };
     });
