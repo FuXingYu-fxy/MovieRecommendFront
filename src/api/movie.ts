@@ -120,3 +120,10 @@ export function queryMovieByPage(requestBody: QueryByPageBody) {
     data: requestBody,
   })
 }
+
+export function queryTagsByMovieId(params: {movieId: number}) {
+  return request<{id: number, tag_name: string}[]>({
+    url: '/queryTagsByMovieId',
+    params
+  })
+}

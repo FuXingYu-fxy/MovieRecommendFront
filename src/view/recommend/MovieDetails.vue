@@ -6,7 +6,8 @@ import {
   NSpace,
   NButton,
   NIcon,
-  NScrollbar
+  NScrollbar,
+  NTag,
 } from "naive-ui";
 import {
   addUserFavoriteMovie,
@@ -14,11 +15,21 @@ import {
   updateRating,
   delUserFavoriteMovie,
   queryFavoriteMovie,
+  queryTagsByMovieId,
 } from "@/api/movie";
 import useStore from "@/hooks/store";
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { CheckmarkCircleOutline, AddCircleOutline } from "@vicons/ionicons5";
 import useActionCapture from "@/hooks/actionCapture";
+import { movieTagMap } from "@/dicts";
+const colorList = [
+  "#0099CC",
+  "#339966",
+  "#FFCC33",
+  "#33FF99",
+  "#66CCFF",
+  "#FF2277",
+];
 const store = useStore();
 const props = defineProps<{
   id: number | string;
@@ -38,6 +49,7 @@ onMounted(start);
 onUnmounted(end);
 
 const rate = ref(0);
+const movieTags = ref<{ id: number; tag_name: string }[]>([]);
 const userId = computed<number>(() => store.getters["user/userId"]);
 
 const handleChangeRate = (val: number) => {
@@ -83,6 +95,19 @@ const addWatchLater = () => {
     updateImplicit(5);
   });
 };
+
+queryTagsByMovieId({
+  movieId: Number(props.id),
+}).then((res) => {
+  if (res && res.length) {
+    movieTags.value = res.map((item) => {
+      return {
+        id: item.id,
+        tag_name: movieTagMap[item.tag_name],
+      };
+    });
+  }
+});
 </script>
 <template>
   <n-card>
@@ -92,7 +117,20 @@ const addWatchLater = () => {
         <img class="cover" :src="cover" />
         <div class="text-container">
           <span>{{ title }}</span>
-          <span>动作冒险</span>
+          <n-space>
+            <n-tag
+              v-for="(item, i) of movieTags"
+              round
+              size="small" 
+              :key="item.id"
+              :color="{
+                borderColor: colorList[i % colorList.length],
+                textColor: colorList[i % colorList.length],
+              }"
+            >
+              {{ item.tag_name }}
+            </n-tag>
+          </n-space>
           <p>剧情简介</p>
           <n-scrollbar>
             {{ description }}
