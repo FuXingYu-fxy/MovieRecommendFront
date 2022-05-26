@@ -6,6 +6,7 @@ import {
   NSpace,
   NButton,
   NIcon,
+  NScrollbar
 } from "naive-ui";
 import {
   addUserFavoriteMovie,
@@ -93,7 +94,9 @@ const addWatchLater = () => {
           <span>{{ title }}</span>
           <span>动作冒险</span>
           <p>剧情简介</p>
-          <p>{{ description }}</p>
+          <n-scrollbar>
+            {{ description }}
+          </n-scrollbar>
           <n-space justify="space-between">
             <p>看过这部电影？ 给个<n-text type="success">评分吧</n-text></p>
             <n-button
