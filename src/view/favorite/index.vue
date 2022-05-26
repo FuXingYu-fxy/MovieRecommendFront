@@ -22,7 +22,7 @@ export default defineComponent({
   async mounted() {
      const data = await queryFavoriteMovieById<MovieInfo[]>({
       id: this.userId,
-    }, this.requestUpdated);
+    }, this.favoriteUpdated);
       this.movieData = data.map(item => {
         const root = import.meta.env.VITE_BASE_URL
         return {
@@ -31,16 +31,16 @@ export default defineComponent({
           poster: `${root}/poster/${item.poster}`,
         }
       });
-      if (this.requestUpdated) {
-        this.toggleRequestUpdated(false);
+      if (this.favoriteUpdated) {
+        this.setFavoriteUpdated(false);
       }
   },
   computed: {
     ...mapGetters("user", ["userId"]),
-    ...mapGetters(["requestUpdated"]),
+    ...mapGetters(["favoriteUpdated"]),
   },
   methods: {
-    ...mapMutations({toggleRequestUpdated: "TOGGLE_REQUEST_UPDATED"})
+    ...mapMutations({setFavoriteUpdated: "SET_FAVORITE_UPDATED"})
   }
 })
 

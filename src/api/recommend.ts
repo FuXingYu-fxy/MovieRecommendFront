@@ -9,11 +9,12 @@ export interface MovieInfo {
 }
 type RecommendType =  'Item' | 'User'
 
-export function recommend<T = MovieInfo[]>(params: {userId: string, N?: number}, type: RecommendType){
+export function recommend<T = MovieInfo[]>(params: {userId: string, N?: number, type: RecommendType, flag: boolean}){
+  const {type = 'User', flag = false, ...args} = params;
   return request<T>({
     url: `/recommendBy${type}`,
-    params
-  });
+    params: args,
+  }, flag);
 }
 
 export function hottestMovie<T = MovieInfo[]>() {

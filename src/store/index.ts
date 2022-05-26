@@ -14,19 +14,24 @@ const storeModules = Object.keys(modules).reduce((myModules, path) => {
 const store = createStore<RootStateTypes>({
   state: {
     collapsed: true,
-    requestUpdated: false,
+    favoriteUpdated: false,
+    movieUpdated: false,
   },
   mutations: {
     TOGGLE_COLLAPSED(state, collapsed: boolean) {
-      state.collapsed = collapsed
+      state.collapsed = collapsed;
     },
-    TOGGLE_REQUEST_UPDATED(state, requestUpdated: boolean) {
-      state.requestUpdated = requestUpdated
+    SET_FAVORITE_UPDATED(state, flag: boolean) {
+      state.favoriteUpdated = flag;
+    },
+    SET_MOVIE_UPDATED(state, flag: boolean) {
+      state.movieUpdated = flag;
     }
   },
   getters: {
     collapsed: (state) => state.collapsed,
-    requestUpdated: (state) => state.requestUpdated,
+    movieUpdated: (state) => state.movieUpdated,
+    favoriteUpdated: (state) => state.favoriteUpdated,
   },
   modules: storeModules
 });

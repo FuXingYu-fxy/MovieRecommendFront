@@ -1,7 +1,8 @@
 import type {User} from "@/store/modules/user"
 export default interface RootStateTypes {
   collapsed: boolean;
-  requestUpdated: boolean;
+  favoriteUpdated: boolean;
+  movieUpdated: boolean;
 }
 
 export interface AllStoreTypes extends RootStateTypes {

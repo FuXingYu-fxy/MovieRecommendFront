@@ -1,31 +1,37 @@
 <script lang="ts" setup>
-import { NCard, NText, NRate, NSpace, NButton, NIcon } from "naive-ui";
-import { 
-  addUserFavoriteMovie, 
-  queryRating, 
-  updateRating, 
-  delUserFavoriteMovie, 
-  queryFavoriteMovie 
+import {
+  NCard,
+  NText,
+  NRate,
+  NSpace,
+  NButton,
+  NIcon,
+} from "naive-ui";
+import {
+  addUserFavoriteMovie,
+  queryRating,
+  updateRating,
+  delUserFavoriteMovie,
+  queryFavoriteMovie,
 } from "@/api/movie";
 import useStore from "@/hooks/store";
-import { 
-  ref, 
-  computed, 
-  onMounted,
-  onUnmounted,
-} from "vue";
-import {CheckmarkCircleOutline, AddCircleOutline} from "@vicons/ionicons5";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { CheckmarkCircleOutline, AddCircleOutline } from "@vicons/ionicons5";
 import useActionCapture from "@/hooks/actionCapture";
 const store = useStore();
 const props = defineProps<{
-  id: number| string;
+  id: number | string;
   poster: string;
   cover: string;
   title: string;
   description: string;
 }>();
 // 位于该页面8秒后, 认定用户对其有潜在兴趣
-const [start, end, updateImplicit] = useActionCapture(props.id as number, 8000, 3);
+const [start, end, updateImplicit] = useActionCapture(
+  props.id as number,
+  8000,
+  3
+);
 // 挂在完毕后就开始计时
 onMounted(start);
 onUnmounted(end);
@@ -37,11 +43,11 @@ const handleChangeRate = (val: number) => {
   updateRating({
     userId: userId.value,
     movieId: Number(props.id),
-    rating: val
-  }).then((res) => {
-    // TODO
-    console.log(res);
+    rating: val,
+  }).then(() => {
     rate.value = val;
+    // 评分更新成功后, 将缓存更新状态设置为true, 接口就回去重新获取最新推荐结果
+    store.commit("SET_MOVIE_UPDATED", true);
   });
 };
 
@@ -54,24 +60,28 @@ queryRating({
 });
 
 const isWatchLater = ref(false);
-queryFavoriteMovie<{movie_id: number}[]>({
+queryFavoriteMovie<{ movie_id: number }[]>({
   userId: userId.value,
-  movieId: Number(props.id)
-}).then(res => {
+  movieId: Number(props.id),
+}).then((res) => {
   isWatchLater.value = Boolean(res.length);
-})
+});
+
 const addWatchLater = () => {
-  const requestApi = isWatchLater.value ? delUserFavoriteMovie : addUserFavoriteMovie;
+  const requestApi = isWatchLater.value
+    ? delUserFavoriteMovie
+    : addUserFavoriteMovie;
   requestApi({
     userId: store.getters["user/userId"],
     movieId: Number(props.id),
   }).then(() => {
     isWatchLater.value = !isWatchLater.value;
-    store.commit('TOGGLE_REQUEST_UPDATED', true);
+    // favorite 页面会重新请求
+    store.commit("SET_FAVORITE_UPDATED", true);
     // 认定用户对其有潜在兴趣
     updateImplicit(5);
   });
-}
+};
 </script>
 <template>
   <n-card>
@@ -86,7 +96,12 @@ const addWatchLater = () => {
           <p>{{ description }}</p>
           <n-space justify="space-between">
             <p>看过这部电影？ 给个<n-text type="success">评分吧</n-text></p>
-            <n-button text size="large" @click="addWatchLater" :title="isWatchLater ? '已添加到稍后再看' : '添加到稍后再看'">
+            <n-button
+              text
+              size="large"
+              @click="addWatchLater"
+              :title="isWatchLater ? '已添加到稍后再看' : '添加到稍后再看'"
+            >
               <template #icon>
                 <n-icon>
                   <checkmark-circle-outline v-if="isWatchLater" />
