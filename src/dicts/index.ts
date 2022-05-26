@@ -39,5 +39,5 @@ export const movieTagMap: {
   "IMAX": "IMAX",
   "Western": "西部",
   "Film-Noir": "黑色电影",
-  "(no genres listed)": "未分类"
+  "(no genres listed)": "其它"
 }

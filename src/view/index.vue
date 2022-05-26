@@ -29,11 +29,9 @@ const jump = () => {
   position: fixed;
   width: 100vw;
   transform: translate(-24px, -24px);
-  transition: .5s;
   filter: brightness(0.3);
 }
 .text {
-  // padding-top: 50px;
   padding: 50px 0 0 10px;
   position: relative;
   z-index: 3;
