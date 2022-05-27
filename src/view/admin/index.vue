@@ -1,17 +1,43 @@
 <script lang="ts" setup>
-import { NButton, NGradientText, useMessage } from "naive-ui";
+import {
+  NButton,
+  NGradientText,
+  useMessage,
+  NCard,
+  NPageHeader,
+  NDivider,
+} from "naive-ui";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { shutDown } from "@/api/management";
+
+const router = useRouter();
+const isShuttingDown = ref(false);
 const message = useMessage();
+const back = () => {
+  router.back();
+};
 const handleClick = () => {
-  message.success("欢迎您, 管理员!");
+  isShuttingDown.value = true;
+  shutDown()
+    .then(() => {
+      message.success("系统已关闭");
+    })
+    .finally(() => {
+      isShuttingDown.value = false;
+    });
 };
 </script>
 <template>
-  <div>
-    <n-gradient-text>
-      <h1>这里是管理员页面</h1>
-    </n-gradient-text>
-    <n-button @click="handleClick">管理员</n-button>
-  </div>
+  <n-card>
+    <n-page-header @back="back">
+      <template #title>
+        <a style="text-decoration: none; color: inherit">系统管理</a>
+      </template>
+    </n-page-header>
+    <n-divider />
+    <n-button @click="handleClick" :loading="isShuttingDown">关机</n-button>
+  </n-card>
 </template>
 
 <style lang="scss"></style>
