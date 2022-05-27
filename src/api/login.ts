@@ -3,6 +3,7 @@ interface UserInfo {
   userId: number;
   account: string;
   userName: string;
+  roles: string[];
   pass: boolean;
 }
 export function getUserInfo<T = UserInfo>(requestBody: { token: string }) {

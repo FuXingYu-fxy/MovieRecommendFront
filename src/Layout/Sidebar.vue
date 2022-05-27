@@ -1,18 +1,17 @@
 <script lang="ts" setup>
-import { routes } from "@/router/index";
 import { NMenu, NGradientText } from "naive-ui";
-import { computed } from "vue";
+import { computed, } from "vue";
 import { RouterLink, useRoute } from "vue-router";
 import { useNaiveUiMenuOptions } from "@/hooks/index";
-import useStore from '@/hooks/store'
+import useStore from "@/hooks/store";
 // routes 现在是一个响应式对象, 所以在改变时computed 会重新触发
-const menuOptions = computed(() => useNaiveUiMenuOptions(routes))
 
 const store = useStore();
 const route = useRoute();
-const activeMenu = computed(() => (route.name as string))
-const collapsed = computed(() => store.state.collapsed);
+const menuOptions = computed(() => useNaiveUiMenuOptions(store.getters["permission/accessRoutes"]));
 
+const activeMenu = computed(() => route.name as string);
+const collapsed = computed(() => store.state.collapsed);
 </script>
 <template>
   <router-link to="/">

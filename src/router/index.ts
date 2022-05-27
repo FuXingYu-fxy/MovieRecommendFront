@@ -1,6 +1,7 @@
-import { shallowReactive } from "vue";
+import { shallowReactive, markRaw } from "vue";
 import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 import {MdGlobe} from "@vicons/ionicons4";
+import {UserAdmin} from "@vicons/carbon";
 import Layout from "@/Layout/index.vue";
 
 // 自动导入 modules/ 下的文件
@@ -9,7 +10,7 @@ const modulesRoute = Object.keys(modules).map((path) => {
   return modules[path].default as RouteRecordRaw;
 });
 
-export const routes: Array<RouteRecordRaw> = shallowReactive([
+export const routes: RouteRecordRaw[] = shallowReactive([
   {
     path: "/",
     name: "Home",
@@ -38,7 +39,7 @@ export const routes: Array<RouteRecordRaw> = shallowReactive([
   ...modulesRoute,
 ]);
 
-export const asyncRoutes: Array<RouteRecordRaw> = [
+export const asyncRoutes: RouteRecordRaw[] = [
   {
     path: "/admin",
     name: "Admin",
@@ -51,9 +52,17 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         path: "",
         name: "AdminConfig",
         component: () => import("@/view/admin/index.vue"),
+        icon: UserAdmin,
       },
     ],
   },
+  {
+    hidden: true,
+    // vue3 中, 必须使用自定义正则表达式匹配所有路径
+    path: "/:catchAll(.*)",
+    // 重定向到首页
+    redirect: {name: "Fxy"},
+  }
 ];
 
 const router = createRouter({
