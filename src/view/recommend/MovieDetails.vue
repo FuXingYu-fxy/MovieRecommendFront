@@ -42,7 +42,7 @@ const props = defineProps<{
 const [start, end, updateImplicit] = useActionCapture(
   props.id as number,
   8000,
-  3
+  4
 );
 // 挂在完毕后就开始计时
 onMounted(start);

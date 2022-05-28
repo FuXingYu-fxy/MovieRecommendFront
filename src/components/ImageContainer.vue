@@ -17,10 +17,11 @@ const props = withDefaults(defineProps<Props>(), {
   description: "抱歉，该电影还没有任何简介",
   width: 200,
 });
-const [start, end] = useActionCapture(props.id);
+const [start, end, updateImplicitRating] = useActionCapture(props.id);
 
 const jumpToMovieDetails = () => {
   end();
+  updateImplicitRating(3);
   router.push({
     name: "MovieDetails",
     params: {
