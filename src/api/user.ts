@@ -51,10 +51,11 @@ export function isPasswordValid(requestBody: {userId: number; password: string})
   })
 }
 
-export function watchedMovieTags(params: {userId: number}) {
+export function watchedMovieTags(requestBody: {userId: number}) {
   return request<PreferenceTag[]>({
     url: "/user/watchedMovieTags",
-    params,
+    method: "POST",
+    data: requestBody,
   })
 } 
 
