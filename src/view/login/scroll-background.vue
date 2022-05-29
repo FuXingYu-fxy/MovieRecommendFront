@@ -1,106 +1,85 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-  props: {
-    src: {
-      type: String,
-      required: true,
-    },
-    speed: {
-      type: Number,
-      default: 1,
-    },
-    direction: {
-      type: String,
-      default: "right",
-    },
-  },
-  data() {
-    return {
-      cw: 0,
-      ch: 0,
-      imgW: 0,
-      imgH: 0,
-      rateX: 0, // 水平轴的缩放比例
-      offsetX: 0, //  水平位移
-      animationId: -1,
-    };
-  },
-  mounted() {
-    const img = new Image();
-    img.src = this.src;
-    img.onload = () => {
-      const canvas = this.$refs.canvas as HTMLCanvasElement;
-      this.cw = canvas.width;
-      this.ch = canvas.height;
-      this.imgW = img.width;
-      this.imgH = img.height;
-      this.ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-      this.rateX = img.width / canvas.width;
-      this.draw();
-    };
-    // 动态挂载
-    this.img = img;
-    
-  },
-  unmounted() {
-    this.cancelAnimation();
-  },
-  methods: {
-    draw() {
-      if (this.direction === "right") {
-        this.translateRight();
-      } else {
-        this.translateLeft();
-      }
-    },
-    translateLeft() {
-      this.ctx.clearRect(0, 0, this.cw, this.ch);
-      let offsetX = this.offsetX - this.speed;
-      this.offsetX = offsetX < -this.cw ? 0 : offsetX;
-      this.ctx.drawImage(this.img, this.offsetX, 0, this.cw, this.ch);
-
-      // 补全的图像
-      this.ctx.drawImage(
-        this.img,
-        0,
-        0,
-        this.imgW,
-        this.imgH,
-        this.cw + this.offsetX,
-        0,
-        this.cw,
-        this.ch
-      );
-      this.animationId = requestAnimationFrame(this.translateLeft);
-    },
-    translateRight() {
-      this.ctx.clearRect(0, 0, this.cw, this.ch);
-      this.offsetX = (this.offsetX + this.speed) % this.cw;
-      // 移出去的图像
-      this.ctx.drawImage(this.img, this.offsetX, 0, this.cw, this.ch);
-      // 补全的图像
-      this.ctx.drawImage(
-        this.img,
-        this.rateX * (this.cw - this.offsetX),
-        0,
-        this.imgW,
-        this.imgH,
-        0,
-        0,
-        this.cw,
-        this.ch
-      );
-      this.animationId = requestAnimationFrame(this.translateRight);
-    },
-    cancelAnimation() {
-      cancelAnimationFrame(this.animationId);
-    }
-  },
+<script lang="ts" setup>
+import { onMounted, ref, onUnmounted } from "vue";
+interface Props {
+  src: string;
+  speed?: number;
+  direction?: "left" | "right";
+}
+const props = withDefaults(defineProps<Props>(), {
+  speed: 1,
+  direction: "right",
 });
+
+let imgW = 0,
+  imgH = 0,
+  rateX = 0,
+  offsetX = 0,
+  animationId = -1,
+  cw = 0,
+  ch = 0;
+
+let picture: HTMLImageElement | null = null;
+let ctx: CanvasRenderingContext2D | null = null;
+const canvas = ref<HTMLCanvasElement | null>(null);
+onUnmounted(cancelAnimation);
+onMounted(() => {
+  const img = new Image();
+  img.src = props.src;
+  img.onload = () => {
+    const canvasValue = canvas.value;
+    if (!canvasValue) return;
+    ctx = canvasValue.getContext("2d");
+    imgW = img.width;
+    imgH = img.height;
+    cw = canvasValue.width;
+    ch = canvasValue.height;
+    rateX = imgW / cw;
+    draw();
+  };
+  // 动态挂载
+  picture = img;
+});
+
+function cancelAnimation() {
+  cancelAnimationFrame(animationId);
+}
+function draw() {
+  if (props.direction === "right") {
+    translateRight();
+  } else {
+    translateLeft();
+  }
+}
+
+function translateLeft() {
+  ctx!.clearRect(0, 0, cw, ch);
+  offsetX = offsetX - props.speed < -cw ? 0: offsetX - props.speed;
+  // 左边移出图像
+  ctx!.drawImage(picture!, offsetX, 0, cw, ch);
+  // 除了 picture 前四个参数描述的是源文件, 后四个参数描述的是缩放后的图像
+  // 补全的图像
+  ctx!.drawImage(picture!, 0, 0, imgW, imgH, cw + offsetX, 0, cw, ch);
+  animationId = requestAnimationFrame(translateLeft);
+}
+
+function translateRight() {
+  ctx!.clearRect(0, 0, cw, ch);
+  offsetX = (offsetX + props.speed) % cw;
+  // 移出去的图像
+  ctx!.drawImage(picture!, offsetX, 0, cw, ch);
+  // 补全的图像
+  ctx!.drawImage(picture!, rateX * (cw - offsetX), 0, imgW, imgH, 0, 0, cw, ch);
+  animationId = requestAnimationFrame(translateRight);
+}
 </script>
 <template>
-  <canvas @mouseleave="draw" @mouseenter="cancelAnimation" ref="canvas" width="1250" height="200"></canvas>
+  <canvas
+    @mouseleave="draw"
+    @mouseenter="cancelAnimation"
+    ref="canvas"
+    width="1250"
+    height="200"
+  ></canvas>
 </template>
 
 <style>

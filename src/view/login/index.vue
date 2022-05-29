@@ -12,17 +12,9 @@ import five from "/4.png";
   <div class="login-page">
     <div class="img-wrap">
       <scroll-background :src="one" :speed="0.35"></scroll-background>
-      <scroll-background
-        :src="two"
-        direction="left"
-        :speed="0.2"
-      ></scroll-background>
+      <scroll-background :src="two" direction="left" :speed="0.2" ></scroll-background>
       <scroll-background :src="three" :speed="0.25"></scroll-background>
-      <scroll-background
-        :src="four"
-        direction="left"
-        :speed="0.2"
-      ></scroll-background>
+      <scroll-background :src="four" direction="left" :speed="0.2" ></scroll-background>
       <scroll-background :src="five" :speed="0.2"></scroll-background>
     </div>
     <div class="login-body">
