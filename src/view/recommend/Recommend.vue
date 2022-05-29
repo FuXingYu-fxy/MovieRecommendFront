@@ -6,6 +6,7 @@ import { recommend } from "@/api/recommend";
 import { NSpace, useMessage } from "naive-ui";
 import type { MessageReactive } from "naive-ui";
 import type { MovieInfo } from "@/api/recommend";
+import fallback from "/fallback.jpg";
 
 type MovieData = MovieInfo[] | null;
 interface Props {
@@ -35,9 +36,10 @@ const generateRecommend = async () => {
     if (result.length) {
       movieData.value = result.map((item) => {
         const root = import.meta.env.VITE_BASE_URL;
+        const cover = `${root}/cover/${item.cover}`;
         return {
           ...item,
-          cover: `${root}/cover/${item.cover}`,
+          cover: item.cover ? cover : fallback,
           poster: `${root}/poster/${item.poster}`,
         };
       });
