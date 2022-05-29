@@ -30,6 +30,7 @@ const collapsed = computed<boolean>({
         @collapse="collapsed = true"
         :bordered="!collapsed"
         :collapsed="collapsed"
+        :width="250"
         :collapsed-width="48"
         :native-scrollbar="false"
         :class="collapsed && 'app-sider-collapsed'"

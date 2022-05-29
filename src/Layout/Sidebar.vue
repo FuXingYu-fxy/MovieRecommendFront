@@ -15,7 +15,7 @@ const collapsed = computed(() => store.state.collapsed);
 </script>
 <template>
   <router-link to="/">
-    <h1 v-show="!collapsed"><n-gradient-text>电影推荐系统</n-gradient-text></h1>
+    <h1 v-show="!collapsed" style="text-align: center;"><n-gradient-text>电影推荐系统</n-gradient-text></h1>
   </router-link>
   <n-menu
     mode="vertical"
