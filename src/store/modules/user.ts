@@ -1,5 +1,5 @@
 import type { Module } from "vuex";
-import RootStateTypes from "@/store/interface";
+import type RootStateTypes from "@/store/interface";
 import { getToken, removeToken } from "@/app/cookie";
 import { getUserInfo } from "@/api/login";
 interface Info {

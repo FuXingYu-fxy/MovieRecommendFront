@@ -1,9 +1,9 @@
 import type { Module } from "vuex";
-import RootStateTypes from "@/store/interface";
+import type RootStateTypes from "@/store/interface";
 import { toRaw } from "vue";
 import { asyncRoutes, routes } from "@/router";
 import { RouteRecordRaw } from "vue-router";
-
+console.log("这里访问routes为什么会有死区?")
 export interface Permission {
   accessRoutes: RouteRecordRaw[];
   constantRoutes: RouteRecordRaw[];

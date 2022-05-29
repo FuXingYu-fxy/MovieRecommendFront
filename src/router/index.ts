@@ -1,8 +1,9 @@
-import { shallowReactive, markRaw } from "vue";
+import { shallowReactive } from "vue";
 import { createRouter, RouteRecordRaw, createWebHashHistory } from "vue-router";
 import {MdGlobe} from "@vicons/ionicons4";
 import {UserAdmin} from "@vicons/carbon";
 import Layout from "@/Layout/index.vue";
+console.log('导入router')
 
 // 自动导入 modules/ 下的文件
 const modules = import.meta.globEager("./modules/*.ts");
